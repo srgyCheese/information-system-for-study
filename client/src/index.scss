@@ -1,10 +1,14 @@
-@import "node_modules/bootstrap/scss/bootstrap";
-
 .container {
   margin: auto;
   max-width: 1080px;
 }
 
 $theme-colors: (
-  "primary": #fff,
+  "primary":#fc8507,
 );
+
+$colors: (
+  "primary":#fff,
+);
+
+@import "node_modules/bootstrap/scss/bootstrap";
