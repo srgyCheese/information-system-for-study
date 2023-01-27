@@ -4,7 +4,7 @@ class User extends Model {}
 
 module.exports = sequelize => {
     User.init({
-        nickname: {
+        fio: {
             type: DataTypes.STRING,
             allowNull: false
         },
@@ -12,7 +12,15 @@ module.exports = sequelize => {
             type: DataTypes.STRING,
             allowNull: false
         },
+        login: {
+            type: DataTypes.STRING,
+            allowNull: false
+        }
     }, { sequelize, modelName: 'User' })
 
-    return User
+    return () => {
+        User.belongsTo(sequelize.models.Role)
+
+        return User
+    }
 }

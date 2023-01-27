@@ -18,8 +18,6 @@ const start = async () => {
     console.log('Ошибка подключения к БД: ', e)
   }
 
-  await sequelize.sync()
-
   app.listen(PORT, () => console.log(`App has been started on port ${PORT}...`))
 }
 

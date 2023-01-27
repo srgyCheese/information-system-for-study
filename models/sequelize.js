@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize')
+const { Sequelize, Model } = require('sequelize')
 
 let sequelize = {}
 
@@ -19,16 +19,18 @@ switch (process.env.DB_DRIVER) {
         throw new Error('DB driver not supported')
 }
 
-const fs = require('fs')
+const fs = require('fs');
 
-const models = {}
+const models = []
 
 fs.readdirSync('./models').forEach(file => {
     if (file == 'sequelize.js') {
         return 
     }
 
-    models[file.substring(0, file.length - 3)] = require('./' + file)(sequelize)
+    models.push(require('./' + file)(sequelize))
 })
+
+models.map(fn => fn.prototype instanceof Model ? fn : fn())
 
 module.exports = sequelize
