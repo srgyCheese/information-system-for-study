@@ -10,7 +10,11 @@ const AppRouter = () => {
     <Routes>
       {
         routes.map(({ path, component, isAuthenticated }) => {
-          if (isAuthenticated !== undefined && isAuthenticated !== auth.isAuthenticated) {
+          if (isAuthenticated !== false && !auth.isAuthenticated) {
+            return <Route key={path} path={path} element={<Navigate replace to="/login" />} />
+          }
+
+          if (isAuthenticated === false && isAuthenticated !== auth.isAuthenticated) {
             return
           }
 

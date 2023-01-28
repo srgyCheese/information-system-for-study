@@ -6,11 +6,11 @@ const start = async () => {
   try {
     await sequelize.authenticate()
 
-    await sequelize.query('SET FOREIGN_KEY_CHECKS = 0')
+    // await sequelize.query('SET FOREIGN_KEY_CHECKS = 0')
 
     await sequelize.sync({ force: true })
 
-    await sequelize.query('SET FOREIGN_KEY_CHECKS = 1')
+    // await sequelize.query('SET FOREIGN_KEY_CHECKS = 1')
 
     const { User, Role } = sequelize.models
 

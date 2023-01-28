@@ -11,7 +11,7 @@ const {User} = sequelize.models
 router.post(
   '/login',
   [
-    check('nickname', 'Минимальная длина никнейма 6 символов').isLength({ min: 6 }),
+    check('login', 'Минимальная длина никнейма 5 символов').isLength({ min: 5 }),
     check('password', 'Минимальная длина пароля 6 символов').isLength({ min: 6 })
   ],
   async (req, res) => {
@@ -25,9 +25,9 @@ router.post(
       })
     }
 
-    const {nickname, password} = req.body
+    const {login, password} = req.body
 
-    const user = await User.findOne({ where: {nickname} })
+    const user = await User.findOne({ where: {login} })
 
     if (!user) {
       return res.status(400).json({ message: 'Пользователь не найден' })
@@ -40,7 +40,7 @@ router.post(
     }
 
     const token = jwt.sign(
-      { userId: user.id },
+      { userId: user.id, role: user.getRole().name },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN }
     )
