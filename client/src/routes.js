@@ -4,10 +4,6 @@ import Profile from "./pages/Profile/Profile"
 
 const routes = [
   {
-    path: '/',
-    component: <Profile />
-  },
-  {
     path: '/login',
     component: <Login />,
     isAuthenticated: false

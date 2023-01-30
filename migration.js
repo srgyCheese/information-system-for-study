@@ -19,6 +19,9 @@ const start = async () => {
 
     await User.create({
       login: 'admin',
+      name: 'Админ Админовый Админович',
+      phone: '+7 (999) 333 00 44',
+      email: 'admin@gmail.com',
       password: bcrypt.hashSync('password', 8),
       fio: 'Admin',
       RoleId: adminRole.id

@@ -40,15 +40,14 @@ router.post(
     }
 
     const token = jwt.sign(
-      { userId: user.id, role: user.getRole().name },
+      { id: user.id, role: user.getRole().name },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN }
     )
 
     res.json({ token })
-
   } catch (e) {
-    console.log(e);
+    console.log(e)
     res.status(500).json({ message: 'Что-то пошло не так' })
   }
 })

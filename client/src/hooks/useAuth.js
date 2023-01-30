@@ -1,10 +1,14 @@
 import { useState, useCallback, useEffect } from 'react'
+import { useRequest } from './useRequest'
 
 const storageName = 'userData'
 
 export const useAuth = () => {
   const [token, setToken] = useState(null)
+  const [user, setUser] = useState(null)
   const [ready, setReady] = useState(false)
+
+  const request = useRequest()
 
   const login = useCallback((jwtToken) => {
     setToken(jwtToken)
@@ -28,7 +32,23 @@ export const useAuth = () => {
     setReady(true)
   }, [login])
 
-  return { login, logout, token, ready }
+  const recieveUser = async () => {
+    if (!token) {
+      return
+    }
+
+    try {
+      const data = await request('/api/users/current-user')
+
+      setUser(data.user)
+    } catch (e) {}
+  }
+
+  useEffect(() => {
+    recieveUser()
+  }, [token])
+
+  return { login, logout, token, ready, user }
 }
 
 export default useAuth

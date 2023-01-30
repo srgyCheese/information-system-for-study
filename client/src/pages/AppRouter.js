@@ -24,7 +24,7 @@ const AppRouter = () => {
         })
       }
 
-      <Route path='*' element={<Navigate replace to="/" />} />
+      <Route path='*' element={<Navigate replace to="/profile" />} />
     </Routes>
   )
 }
