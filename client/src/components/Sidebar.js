@@ -7,8 +7,8 @@ const pages = [
     to: '/profile'
   },
   {
-    label: 'Products',
-    to: '/products'
+    label: 'Categories',
+    to: '/categories'
   }
 ]
 

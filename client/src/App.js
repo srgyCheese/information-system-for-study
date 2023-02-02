@@ -4,7 +4,10 @@ import './index.scss'
 import { BrowserRouter } from 'react-router-dom'
 import AppRouter from "./pages/AppRouter"
 import { useAuth } from "./hooks/useAuth"
-import { AuthContext } from "./contexts/AuthContext"
+import { AuthContext } from "./contexts/AuthContext" 
+import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
+ 
+const queryClient = new QueryClient()
 
 function App() {
   const {token, login, logout, ready, user} = useAuth()
@@ -16,11 +19,13 @@ function App() {
 
   return (
     <BrowserRouter>
-      <AuthContext.Provider value={{
-        token, login, logout, isAuthenticated, user
-      }}>
-        <AppRouter />
-      </AuthContext.Provider>
+      <QueryClientProvider client={queryClient}>
+        <AuthContext.Provider value={{
+          token, login, logout, isAuthenticated, user
+        }}>
+          <AppRouter />
+        </AuthContext.Provider>
+      </QueryClientProvider>
     </BrowserRouter>
   )
 }

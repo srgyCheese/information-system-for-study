@@ -15,7 +15,48 @@ router.get('/', async (req, res) => {
     })
 
     return res.send({
-      data: categories
+      categories
+    })
+  } catch (e) {
+    res.status(500).json({ message: 'Что-то пошло не так' })
+  }
+})
+
+router.get('/:categoryId', async (req, res) => {
+  try {
+    const categories = await Category.findAll({
+      where: {
+        parent_category_id: req.params.categoryId
+      }
+    })
+
+    const category = await Category.findOne({
+      where: {
+        id: req.params.categoryId
+      }
+    })
+
+    return res.send({
+      category,
+      categories
+    })
+  } catch (e) {
+    res.status(500).json({ message: 'Что-то пошло не так' })
+  }
+})
+
+router.delete('/:categoryId', async (req, res) => {
+  try {
+    const category = await Category.findOne({
+      where: {
+        id: req.params.categoryId
+      }
+    })
+
+    await category.destroy()
+
+    return res.send({
+      success: true
     })
   } catch (e) {
     res.status(500).json({ message: 'Что-то пошло не так' })

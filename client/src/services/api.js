@@ -7,11 +7,11 @@ const api = Axios.create({
   }
 })
 
-api.interceptors.response.use((response) => response, (error) => {
-  console.log({error})
+api.__proto__.getData = (...args) => api.get(...args).then(res => res?.data)
 
+api.interceptors.response.use((response) => response, (error) => {
   const serverMessage = error?.response?.data?.message
-  
+
   if (serverMessage) {
     error.message = serverMessage
   }
