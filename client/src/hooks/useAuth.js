@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react'
-import { useRequest } from './useRequest'
+import api from '../services/api'
 
 const storageName = 'userData'
 
@@ -8,10 +8,9 @@ export const useAuth = () => {
   const [user, setUser] = useState(null)
   const [ready, setReady] = useState(false)
 
-  const request = useRequest()
-
   const login = useCallback((jwtToken) => {
     setToken(jwtToken)
+    api.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`
     localStorage.setItem(storageName, JSON.stringify({
       token: jwtToken
     }))
@@ -38,7 +37,7 @@ export const useAuth = () => {
     }
 
     try {
-      const data = await request('/api/users/current-user')
+      const {data} = await api.get('/users/current-user')
 
       setUser(data.user)
     } catch (e) {}

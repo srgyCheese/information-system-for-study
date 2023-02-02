@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import './Login.scss'
-import { useRequest } from '../../hooks/useRequest'
 import { AuthContext } from '../../contexts/AuthContext'
+import api from '../../services/api'
 
 const Login = () => {
   const [login, setLogin] = useState('')
@@ -10,8 +10,6 @@ const Login = () => {
   const [error, setError] = useState('')
 
   const auth = useContext(AuthContext)
-
-  const request = useRequest()
 
   const submitHandler = async e => {
     e.preventDefault()
@@ -27,11 +25,11 @@ const Login = () => {
     try {
       setLoading(true)
 
-      const response = await request('/api/auth/login', 'POST', {
+      const {data} = await api.post('/auth/login', {
         login, password
       })
 
-      auth.login(response.token)
+      auth.login(data.token)
     } catch (e) {
       setError(e.message)
     }

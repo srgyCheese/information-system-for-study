@@ -1,5 +1,5 @@
 import Login from "./pages/Login/Login"
-import Products from "./pages/Products/Products"
+import Categories from "./pages/Categories/Categories"
 import Profile from "./pages/Profile/Profile"
 
 const routes = [
@@ -14,7 +14,7 @@ const routes = [
   },
   {
     path: '/products',
-    component: <Products />
+    component: <Categories />
   }
 ]
 
