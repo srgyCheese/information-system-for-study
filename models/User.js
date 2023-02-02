@@ -26,6 +26,7 @@ module.exports = sequelize => {
   }, {
     sequelize, 
     modelName: 'User',
+    timestamps: true,
   })
 
   User.prototype.makeJSON = function () {

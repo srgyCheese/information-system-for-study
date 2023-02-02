@@ -1,9 +1,6 @@
 const {Router} = require('express')
 const authMiddleware = require('../middlewares/auth.middleware')
-const sequelize = require('../models/sequelize')
 const router = Router()
-
-const {User} = sequelize.models
 
 router.get('/current-user', authMiddleware, async (req, res) => {
   try {
