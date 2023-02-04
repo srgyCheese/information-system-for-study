@@ -19,6 +19,9 @@ module.exports = sequelize => {
     parent_category_id: {
       type: DataTypes.INTEGER,
     },
+    isProductCategory: {
+      type: DataTypes.BOOLEAN
+    }
   }, { sequelize, modelName: 'Category' })
 
   return () => {

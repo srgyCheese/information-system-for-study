@@ -17,4 +17,6 @@ const useCategories = (id) => {
   })
 }
 
-export { useCategories }
+const useCategoryValueTypes = () => useQuery('category-value-types', () => api.getData(`/categories/value-types`))
+
+export { useCategories, useCategoryValueTypes }

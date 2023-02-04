@@ -4,20 +4,29 @@ const authMiddleware = require('../middlewares/auth.middleware')
 const sequelize = require('../models/sequelize')
 const router = Router()
 
-const {Category} = sequelize.models
+const {Category, ValueType, CategoryAttribute} = sequelize.models
 
 router.get('/', async (req, res) => {
   try {
-    const categories = await Category.findAll({
-      where: {
-        parent_category_id: null
-      }
-    })
+    const categories = await Category.findAll()
 
     return res.send({
       categories
     })
   } catch (e) {
+    res.status(500).json({ message: 'Что-то пошло не так' })
+  }
+})
+
+router.get('/value-types', async (req, res) => {
+  try {
+    const valueTypes = await ValueType.findAll()
+
+    return res.send({
+      valueTypes
+    })
+  } catch (e) {
+    console.log({e});
     res.status(500).json({ message: 'Что-то пошло не так' })
   }
 })
@@ -106,8 +115,19 @@ router.post('/create', authMiddleware, async (req, res) => {
 
     const category = await Category.create({
       title: req.body.title,
-      parent_category_id: parent_category_id
+      parent_category_id: parent_category_id,
+      isProductCategory: !!req.body.values
     })
+
+    if (req.body.values) {
+      for (const el of req.body.values) {
+        await CategoryAttribute.create({
+          title: el.title,
+          ValueTypeId: el.type,
+          CategoryId: category.id
+        })
+      }
+    }
 
     return res.send({
       data: category,

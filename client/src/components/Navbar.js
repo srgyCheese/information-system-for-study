@@ -6,7 +6,7 @@ const Navbar = () => {
   const auth = useContext(AuthContext)
 
   return (
-    <nav className="navbar navbar-light bg-primary" style={{zIndex: 9999}}>
+    <nav className="navbar navbar-light bg-primary" style={{zIndex: 99}}>
       <div className="container">
         <Link className="navbar-brand" to="/">
           <img src="/assets/svg/logo.svg" width="100" className="d-inline-block align-top" alt="logo" />

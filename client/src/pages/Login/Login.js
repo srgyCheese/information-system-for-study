@@ -1,13 +1,13 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import './Login.scss'
 import { AuthContext } from '../../contexts/AuthContext'
 import api from '../../services/api'
+import { toast } from 'react-toastify'
 
 const Login = () => {
   const [login, setLogin] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
 
   const auth = useContext(AuthContext)
 
@@ -15,11 +15,15 @@ const Login = () => {
     e.preventDefault()
 
     if (login.length < 5) {
-      return setError('Длина логина должна быть не менее 5 символов')
+      return toast('Длина логина должна быть не менее 5 символов', {
+        type: 'error'
+      })
     }
 
     if (password.length < 5) {
-      return setError('Длина пароля должна быть не менее 6 символов')
+      return toast('Длина пароля должна быть не менее 6 символов', {
+        type: 'error'
+      })
     }
 
     try {
@@ -30,16 +34,14 @@ const Login = () => {
       })
 
       auth.login(data.token)
-    } catch (e) {
-      setError(e.message)
-    }
+    } catch (e) {}
 
     setLoading(false)
   }
 
   return (
-    <div className="login">
-      <div className='login-form shadow mt-4 p-4 rounded'>
+    <div className="login pt-4">
+      <div className='login-form shadow p-4 rounded'>
         <form onSubmit={submitHandler}>
           <div className="form-outline mb-4">
             <label className="form-label">Login</label>
@@ -48,7 +50,6 @@ const Login = () => {
               className="form-control" 
               onChange={e => setLogin(e.target.value)}
               value={login}
-              disabled={loading}
             />
           </div>
         
@@ -60,15 +61,12 @@ const Login = () => {
               className="form-control"
               onChange={e => setPassword(e.target.value)}
               value={password}
-              disabled={loading}
             />
           </div>
-          {error && <div className={`alert alert-danger alert-dismissible fade show`}>
-              {error}
-              <button type="button" className="btn-close" aria-label="Close" onClick={() => setError('')}></button>
-            </div>
-          }
-          <button type="submit" disabled={loading} className="btn btn-primary btn-block">Sign in</button>
+          <button type="submit" disabled={loading} className="btn btn-primary btn-block">
+            {loading && <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>}
+            Sign in
+          </button>
         </form>
       </div>
     </div>

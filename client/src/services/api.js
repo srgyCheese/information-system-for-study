@@ -1,4 +1,5 @@
 import Axios from 'axios'
+import { toast } from 'react-toastify'
 
 const api = Axios.create({
   baseURL: '/api/',
@@ -14,6 +15,10 @@ api.interceptors.response.use((response) => response, (error) => {
 
   if (serverMessage) {
     error.message = serverMessage
+
+    toast(serverMessage, {
+      type: 'error'
+    })
   }
 
   throw error

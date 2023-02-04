@@ -1,7 +1,7 @@
 import React from 'react'
 import CategoryCard from './CategoryCard'
 
-const CategoriesList = ({ categories, onDelete }) => {
+const CategoriesList = ({ categories }) => {
   if (!categories?.length) {
     return <h5>Категорий не найдено</h5>
   }
@@ -9,8 +9,8 @@ const CategoriesList = ({ categories, onDelete }) => {
   return (
     <div className="row row-cols-1 row-cols-md-4 g-4">
       {categories.map(category => (
-        <div className="col">
-          <CategoryCard category={category} refetch={onDelete} />
+        <div className="col" key={category.id}>
+          <CategoryCard category={category} />
         </div>
       ))}
     </div>
