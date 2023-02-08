@@ -3,12 +3,16 @@ import { NavLink, useLocation } from 'react-router-dom'
 
 const pages = [
   {
-    label: 'Profile',
+    label: 'Профиль',
     to: '/profile'
   },
   {
-    label: 'Categories',
+    label: 'Категории',
     to: '/categories'
+  },
+  {
+    label: 'Продукты',
+    to: '/products'
   }
 ]
 

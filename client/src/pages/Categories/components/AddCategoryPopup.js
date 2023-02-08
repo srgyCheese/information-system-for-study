@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { toast } from 'react-toastify'
 import Popup from '../../../components/Popup'
@@ -14,6 +14,7 @@ const AddCategoryPopup = ({id}) => {
   const [title, setTitle] = useState('')
   const [loading, setLoading] = useState(false)
   const [categoryValues, setCategoryValues] = useState([])
+  const photoRef = useRef()
   const { isLoading,  data : valueTypes } = useCategoryValueTypes()
 
   const currentCategory = data?.categories?.find(el => el.id == +id)
@@ -29,13 +30,34 @@ const AddCategoryPopup = ({id}) => {
       })
     }
 
+    if (!photoRef.current?.files?.length) {
+      return toast('Нет фото категории', {
+        type: 'error'
+      })
+    }
+
     try {
       setLoading(true)
+
+      const formData = new FormData()
+
+      console.log(photoRef.current.files[0]);
+
+      formData.append('photo', photoRef.current.files[0])
+
+      const photoUrlRes = await api.post('/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+
+      const {url} = photoUrlRes.data
       
       const newCategory = await api.post('/categories/create', {
         title,
         parent_category_id: id,
-        values: isCategoryForProducts ? categoryValues : null
+        values: isCategoryForProducts ? categoryValues : null,
+        photo: url
       })
 
       await refetch()
@@ -47,6 +69,17 @@ const AddCategoryPopup = ({id}) => {
   return (
     <Popup title={`Добавление категории${currentCategory?.title ? ` к ${currentCategory.title}` : ''}`}>
       <form onSubmit={submitHandler}>
+        <div className="form-outline">
+          <label className="form-label">Фото категории</label>
+          <div className="mb-3">
+            <input 
+              className="form-control" 
+              type="file" 
+              id="formFile"
+              ref={photoRef}
+            />
+          </div>
+        </div>
         <div className="form-outline">
           <label className="form-label">Название</label>
           <input 

@@ -7,9 +7,9 @@ const CategoriesList = ({ categories }) => {
   }
 
   return (
-    <div className="row row-cols-1 row-cols-md-4 g-4">
+    <div className="row">
       {categories.map(category => (
-        <div className="col" key={category.id}>
+        <div className="col col-lg-3 mb-3 d-flex align-items-stretch" key={category.id}>
           <CategoryCard category={category} />
         </div>
       ))}

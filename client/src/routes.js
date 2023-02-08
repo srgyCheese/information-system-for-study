@@ -1,7 +1,7 @@
 import Login from "./pages/Login/Login"
 import Categories from "./pages/Categories/Categories"
 import Profile from "./pages/Profile/Profile"
-import CreateCategory from "./pages/CreateCategory/CreateCategory"
+import Products from "./pages/Products/Products"
 
 const routes = [
   {
@@ -22,13 +22,9 @@ const routes = [
     component: <Categories />
   },
   {
-    path: '/categories/:id/create',
-    component: <CreateCategory />
+    path: '/products',
+    component: <Products />
   },
-  {
-    path: '/categories/create',
-    component: <CreateCategory />
-  }
 ]
 
 export default routes

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import Layout from '../../components/Layout'
 import Spinner from '../../components/Spinner'
 import { PopupContext } from '../../contexts/PopupContext'
@@ -12,6 +12,7 @@ const Categories = () => {
   const {id} = useParams()
 
   const {isLoading, data} = useCategories()
+  const navigate = useNavigate()
   const {openPopup} = useContext(PopupContext)
 
   if (isLoading) {
@@ -35,6 +36,7 @@ const Categories = () => {
         ? <button 
             type="button" 
             className="btn btn-outline-success"
+            onClick={() => navigate('/products')}
           >
             Добавить Продукт
           </button> 

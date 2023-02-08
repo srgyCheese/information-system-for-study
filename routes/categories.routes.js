@@ -62,6 +62,12 @@ router.delete('/:categoryId', async (req, res) => {
       }
     })
 
+    await CategoryAttribute.destroy({
+      where: {
+        CategoryId: req.params.categoryId
+      }
+    })
+
     await category.destroy()
 
     return res.send({
@@ -77,6 +83,12 @@ router.post('/create', authMiddleware, async (req, res) => {
     if (!req.body.title) {
       return res.status(400).json({
         message: 'Не введено название'
+      })
+    }
+
+    if (!req.body.photo) {
+      return res.status(400).json({
+        message: 'Не прикреплено фото'
       })
     }
 
@@ -116,7 +128,8 @@ router.post('/create', authMiddleware, async (req, res) => {
     const category = await Category.create({
       title: req.body.title,
       parent_category_id: parent_category_id,
-      isProductCategory: !!req.body.values
+      isProductCategory: !!req.body.values,
+      photo: req.body.photo
     })
 
     if (req.body.values) {
@@ -134,7 +147,7 @@ router.post('/create', authMiddleware, async (req, res) => {
       message: 'Категория создана'
     })
   } catch (e) {
-    console.log({e});
+    console.log({e})
     res.status(500).json({ message: 'Что-то пошло не так' })
   }
 })

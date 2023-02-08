@@ -25,6 +25,12 @@ const CategoryCard = ({ category }) => {
       className="card border-light shadow-sm mb-3"
       style={{minHeight: '75px'}}
     >
+      <img 
+        src={category.photo} 
+        className="bd-placeholder-img card-img-top cursor-pointer" 
+        onClick={() => navigate(`/categories/${category.id}`)} 
+        style={{height: '100%', objectFit: 'cover'}}
+      />
       <div className="card-body d-flex align-items-center">
         <div className="d-flex justify-content-between align-items-center w-100">
           <h5 
