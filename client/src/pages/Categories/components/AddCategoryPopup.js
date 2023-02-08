@@ -41,8 +41,6 @@ const AddCategoryPopup = ({id}) => {
 
       const formData = new FormData()
 
-      console.log(photoRef.current.files[0]);
-
       formData.append('photo', photoRef.current.files[0])
 
       const photoUrlRes = await api.post('/upload', formData, {

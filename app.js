@@ -15,6 +15,7 @@ app.use('/storage', express.static('storage'))
 app.use('/api/auth', require('./routes/auth.routes'))
 app.use('/api/users', require('./routes/users.routes'))
 app.use('/api/categories', require('./routes/categories.routes'))
+app.use('/api/products', require('./routes/products.routes'))
 
 app.post('/api/upload', authMiddleware, function(req, res) {
   if (!req.files || Object.keys(req.files).length === 0) {

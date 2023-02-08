@@ -18,7 +18,7 @@ const PopupWrapper = ({children, opened, close}) => {
 
   return (
     <>
-      <div ref={outsideRef} className={`modal fade mt-5 ${opened ? 'show' : ''}`} style={{display: "block", pointerEvents: !opened ? 'none' : null}}>
+      <div ref={outsideRef} className={`modal fade ${opened ? 'show' : ''}`} style={{display: "block", pointerEvents: !opened ? 'none' : null}}>
         <div ref={ref}>
           {children}
         </div>

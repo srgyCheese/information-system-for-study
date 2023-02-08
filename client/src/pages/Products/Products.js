@@ -1,10 +1,23 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Layout from '../../components/Layout'
+import ProductsSearchList from '../../components/ProductsSearchList'
+import { PopupContext } from '../../contexts/PopupContext'
+import AddProductPopup from './components/AddProductPopup'
 
 const Products = () => {
+  const {openPopup} = useContext(PopupContext)
+
   return (
     <Layout>
-      Продукты
+      <button 
+        className='btn btn-outline-success' 
+        type='button'
+        onClick={() => openPopup(<AddProductPopup />)}
+      >
+        Добавить товар
+      </button>
+      <hr />
+      <ProductsSearchList />
     </Layout>
   )
 }

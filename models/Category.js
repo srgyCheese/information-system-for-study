@@ -25,9 +25,10 @@ module.exports = sequelize => {
   }, { sequelize, modelName: 'Category' })
 
   return () => {
-    const {Product} = sequelize.models
+    const {Product, CategoryAttribute} = sequelize.models
 
     Category.hasMany(Product)
+    Category.hasMany(CategoryAttribute)
 
     return Category
   }

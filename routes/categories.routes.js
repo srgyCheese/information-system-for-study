@@ -1,5 +1,4 @@
 const {Router} = require('express')
-const {check, validationResult} = require('express-validator')
 const authMiddleware = require('../middlewares/auth.middleware')
 const sequelize = require('../models/sequelize')
 const router = Router()
@@ -24,6 +23,29 @@ router.get('/value-types', async (req, res) => {
 
     return res.send({
       valueTypes
+    })
+  } catch (e) {
+    console.log({e});
+    res.status(500).json({ message: 'Что-то пошло не так' })
+  }
+})
+
+router.get('/attributes/:categoryId', async (req, res) => {
+  try {
+    const attributes = await CategoryAttribute.findAll({
+      where: {
+        CategoryId: req.params.categoryId
+      },
+      attributes: ['id', 'title'],
+      include: [
+        {
+          model: ValueType
+        }
+      ]
+    })
+
+    return res.send({
+      attributes
     })
   } catch (e) {
     console.log({e});

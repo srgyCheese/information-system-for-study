@@ -20,10 +20,11 @@ module.exports = sequelize => {
   })
 
   return () => {
-    const {Product, CategoryAttribute} = sequelize.models
+    const {Product, CategoryAttribute, ValuesSelectVariant} = sequelize.models
 
     ProductValue.belongsTo(Product)
     ProductValue.belongsTo(CategoryAttribute)
+    ProductValue.belongsTo(ValuesSelectVariant)
 
     return ProductValue
   }

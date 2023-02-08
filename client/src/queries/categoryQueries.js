@@ -17,6 +17,17 @@ const useCategories = (id) => {
   })
 }
 
+const useCategoryAttributes = (id) => {
+  const path = ['categoryAttributes']
+
+  path.push(id)
+
+  return useQuery(path, () => api.getData(`/categories/attributes/${id}`), {
+    enabled: !!id
+  })
+}
+
+
 const useCategoryValueTypes = () => useQuery('category-value-types', () => api.getData(`/categories/value-types`))
 
-export { useCategories, useCategoryValueTypes }
+export { useCategories, useCategoryValueTypes, useCategoryAttributes }
