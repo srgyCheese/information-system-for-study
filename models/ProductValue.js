@@ -24,7 +24,9 @@ module.exports = sequelize => {
 
     ProductValue.belongsTo(Product)
     ProductValue.belongsTo(CategoryAttribute)
-    ProductValue.belongsTo(ValuesSelectVariant)
+    ProductValue.belongsTo(ValuesSelectVariant, {
+      foreignKey: 'select'
+    })
 
     return ProductValue
   }

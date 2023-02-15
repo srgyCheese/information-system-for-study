@@ -1,37 +1,53 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React  from 'react'
 import Spinner from '../../../components/Spinner'
-import { PopupContext } from '../../../contexts/PopupContext'
-import { useCategories, useCategoryAttributes } from '../../../queries/categoryQueries'
-import api from '../../../services/api'
+import { useCategoryAttributes } from '../../../queries/categoryQueries'
 
 const InputForAttribute = ({attribute, setValue, value}) => {
   const idForLabel = `add-product-value-${attribute.id}`
 
   switch (attribute.ValueType.name) {
     case 'number':
-      return <input 
-              type='number' 
-              className='form-control' 
-              id={idForLabel} 
-              value={value} 
-              onChange={e => setValue(e.target.value)}
-            />
+      return (
+        <input 
+          type='number' 
+          className='form-control' 
+          id={idForLabel} 
+          value={value} 
+          onChange={e => setValue(e.target.value)}
+        />
+      )
     case 'bool':
-      return <input 
-              type='checkbox'
-              className='form-check-input'
-              id={idForLabel} 
-              value={value} 
-              onChange={e => setValue(!value)}
-            />
+      return (
+        <input 
+          type='checkbox'
+          className='form-check-input'
+          id={idForLabel} 
+          value={value} 
+          onChange={e => setValue(!value)}
+        />
+      )
+    case 'select':
+      return (
+        <select 
+          className="form-select"
+          onChange={e => setValue(e.target.value)}
+        >
+          <option value={null}> </option>
+          {attribute.ValuesSelectVariants.map(variant => (
+            <option key={variant.id} value={variant.id}>{variant.title}</option>
+          ))}
+        </select>
+      )
     default:
-      return <input 
-              type='text' 
-              className='form-control' 
-              id={idForLabel} 
-              value={value} 
-              onChange={e => setValue(e.target.value)}
-            />
+      return (
+        <input 
+          type='text' 
+          className='form-control' 
+          id={idForLabel} 
+          value={value} 
+          onChange={e => setValue(e.target.value)}
+        />
+      )
   }
 }
 

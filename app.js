@@ -4,6 +4,9 @@ const fileUpload = require('express-fileupload')
 const sequelize = require('./models/sequelize')
 const path = require('path')
 const authMiddleware = require('./middlewares/auth.middleware')
+const errorHanderMiddleware = require('./middlewares/errorHander.middleware')
+
+const PORT = process.env.PORT || 5000
 
 const app = express()
 
@@ -43,7 +46,7 @@ app.post('/api/upload', authMiddleware, function(req, res) {
   });
 })
 
-const PORT = process.env.PORT || 5000
+app.use(errorHanderMiddleware)
 
 const start = async () => {
   try {

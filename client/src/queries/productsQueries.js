@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import api from "../services/api";
 
 const useProducts = (params) => {
@@ -15,4 +15,32 @@ const useProducts = (params) => {
   })
 }
 
-export { useProducts }
+const useAddProduct = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation(async product => {
+    const photoUrlRes = await api.addPhoto(product.photos[0])
+
+    product.photos = [photoUrlRes.data.url]
+    
+    return api.post('/products/create', product)
+  }, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('products')
+    },
+  })
+}
+
+const useDeleteProduct = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation(async productId => {
+    return api.delete(`/products/${productId}`)
+  }, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('products')
+    },
+  })
+}
+
+export { useProducts, useAddProduct, useDeleteProduct }

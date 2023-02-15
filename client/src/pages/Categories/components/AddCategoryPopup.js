@@ -1,23 +1,64 @@
 import React, { useContext, useRef, useState } from 'react'
-import { useNavigate, useParams } from 'react-router'
 import { toast } from 'react-toastify'
 import Popup from '../../../components/Popup'
 import { PopupContext } from '../../../contexts/PopupContext'
-import { useCategories, useCategoryValueTypes } from '../../../queries/categoryQueries'
-import {ReactComponent as TrashIcon} from '../../../svg/trash.svg'
-import api from '../../../services/api'
+import DeleteButton from '../../../components/DeleteButton'
+import { useAddCategory, useCategories, useCategoryValueTypes } from '../../../queries/categoryQueries'
+
+const SelectValuesArray = ({variants, setVariants}) => {
+  return (
+    <>
+      {variants && variants?.map((variant, i) => (
+        <div className='d-flex mt-2 gap-2' key={variant.id}>
+          <input 
+            type="text"
+            class="form-control"
+            placeholder="Вариант"
+            value={variant.value}
+            onChange={e => {
+              variants[i].value = e.target.value 
+              setVariants([...variants])
+            }}
+          />
+          <DeleteButton
+            onClick={e => {
+              setVariants(variants.filter(el => el != variant))
+            }}
+          />
+        </div>
+      ))}
+      <div className='d-grid mt-2'>
+        <button 
+          className="btn btn-outline-primary d-block"
+          type="button"
+          onClick={e => {
+            variants = variants || []
+            variants.push({
+              id: Date.now()
+            })
+
+            setVariants(variants)
+          }}
+        >
+          Добавить вариант
+        </button>
+      </div>
+    </>
+  )
+}
 
 const AddCategoryPopup = ({id}) => {
   const {closePopup} = useContext(PopupContext)
 
-  const { data, refetch } = useCategories()
+  const categoriesQuery = useCategories()
+  const addCategory = useAddCategory()
+
   const [title, setTitle] = useState('')
-  const [loading, setLoading] = useState(false)
   const [categoryValues, setCategoryValues] = useState([])
   const photoRef = useRef()
-  const { isLoading,  data : valueTypes } = useCategoryValueTypes()
+  const { data : valueTypes } = useCategoryValueTypes()
 
-  const currentCategory = data?.categories?.find(el => el.id == +id)
+  const currentCategory = categoriesQuery?.data?.categories?.find(el => el.id == +id)
 
   const [isCategoryForProducts, setIsCategoryForProducts] = useState(false)
 
@@ -36,33 +77,17 @@ const AddCategoryPopup = ({id}) => {
       })
     }
 
-    try {
-      setLoading(true)
-
-      const formData = new FormData()
-
-      formData.append('photo', photoRef.current.files[0])
-
-      const photoUrlRes = await api.post('/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      })
-
-      const {url} = photoUrlRes.data
-      
-      const newCategory = await api.post('/categories/create', {
-        title,
-        parent_category_id: id,
-        values: isCategoryForProducts ? categoryValues : null,
-        photo: url
-      })
-
-      await refetch()
-      closePopup()
-    } catch (e) {}
-    setLoading(false)
+    addCategory.mutate({
+      title,
+      photo: photoRef.current.files[0],
+      parent_category_id: id,
+      values: isCategoryForProducts ? categoryValues : null,
+    }, {
+      onSuccess: closePopup
+    })
   }
+
+  const getValueType = valueTypeId => valueTypes.valueTypes.find(el => el.id == valueTypeId)
 
   return (
     <Popup title={`Добавление категории${currentCategory?.title ? ` к ${currentCategory.title}` : ''}`}>
@@ -108,22 +133,18 @@ const AddCategoryPopup = ({id}) => {
                 </tr>
               </thead>
               <tbody>
-                {categoryValues.map(val => (
+                {categoryValues.map((val, i) => (
                   <tr key={val.id}>
-                    <td>
+                    <td style={{width: '50%'}}>
                       <input 
                         type="text" 
                         className="form-control" 
                         placeholder="Свойство"
                         value={val.title}
                         onChange={e => {
-                          const index = categoryValues.findIndex(el => el.id == val.id)
-                          
-                          const newCategoryValues = [...categoryValues]
+                          categoryValues[i].title = e.target.value
 
-                          newCategoryValues[index].title = e.target.value
-
-                          setCategoryValues(newCategoryValues)
+                          setCategoryValues([...categoryValues])
                         }}
                       />
                     </td>
@@ -132,30 +153,27 @@ const AddCategoryPopup = ({id}) => {
                         className="form-select"
                         value={val.type}
                         onChange={e => {
-                          const index = categoryValues.findIndex(el => el.id == val.id)
-                          
-                          const newCategoryValues = [...categoryValues]
+                          categoryValues[i].type = e.target.value
 
-                          newCategoryValues[index].type = e.target.value
-
-                          setCategoryValues(newCategoryValues)
+                          setCategoryValues([...categoryValues])
                         }}
                       >
                         {valueTypes.valueTypes?.map(el => <option key={el.id} value={el.id}>{el.title}</option>)}
                       </select>
+                      {getValueType(val.type).name == 'select' && (
+                        <SelectValuesArray 
+                          variants={val?.variants}
+                          setVariants={(variants) => {
+                            categoryValues[i].variants = variants
+                            setCategoryValues([...categoryValues])
+                          }}
+                        />
+                      )}
                     </td>
                     <td style={{width: '60px'}}>
-                      <button
-                        className="btn btn-danger p-2"
-                        type='button'
-                        onClick={e => {
-                          setCategoryValues(categoryValues.filter(el => el.id != val.id))
-                        }}
-                      >
-                        <div style={{ height: '24px', width: '24px' }}>
-                          <TrashIcon width="24" />
-                        </div>
-                      </button>
+                      <DeleteButton 
+                        onClick={e => setCategoryValues(categoryValues.filter(el => el.id != val.id))}
+                      />
                     </td>
                   </tr>
                 ))}
@@ -170,8 +188,8 @@ const AddCategoryPopup = ({id}) => {
             </button>
           </div>
         )}
-        <button type="submit" className="btn btn-success mt-4" disabled={loading}>
-          {loading && <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>}
+        <button type="submit" className="btn btn-success mt-4" disabled={addCategory.isLoading}>
+          {addCategory.isLoading && <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>}
           Создать
         </button>
       </form>

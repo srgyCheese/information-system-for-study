@@ -4,7 +4,9 @@ class ProductPhoto extends Model { }
 
 module.exports = sequelize => {
   ProductPhoto.init({
-    url: ''
+    url: {
+      type: DataTypes.STRING
+    }
   }, { 
     sequelize, 
     modelName: 'ProductPhoto',

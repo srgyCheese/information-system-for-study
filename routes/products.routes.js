@@ -30,7 +30,7 @@ router.post('/create', [
       CategoryId: req.body.category_id
     })
 
-    for (attrValueId of Object.keys(req.body.attributesValues)) {
+    for (let attrValueId of Object.keys(req.body.attributesValues)) {
       const categoryAttribute = await CategoryAttribute.findOne({
         where: {
           id: attrValueId
@@ -46,8 +46,14 @@ router.post('/create', [
       })
     }
 
+    await ProductPhoto.bulkCreate(req.body.photos.map(photo => ({
+      url: photo,
+      ProductId: product.id
+    })))
+
     return res.send({product})
   } catch (e) {
+    console.log(e)
     res.status(500).json({ message: 'Что-то пошло не так' })
   }
 })
@@ -78,14 +84,48 @@ router.get('/:id', async (req, res) => {
   }
 })
 
-router.get('/', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
-    const products = await Product.findAll()
+    await ProductValue.destroy({
+      where: {
+        ProductId: req.params.id
+      }
+    })
 
-    return res.send({products})
+    await ProductPhoto.destroy({
+      where: {
+        ProductId: req.params.id
+      }
+    })
+
+    await Product.destroy({
+      where: {
+        id: req.params.id,
+      },
+    })
+
+    return res.send({
+      message: 'Товар удален'
+    })
   } catch (e) {
     console.log(e)
     res.status(500).json({ message: 'Что-то пошло не так' })
+  }
+})
+
+router.get('/', async (req, res, next) => {
+  try {
+    const products = await Product.findAll({
+      include: [
+        {
+          model: ProductPhoto
+        }
+      ]
+    })
+
+    return res.send({products})
+  } catch (e) {
+    next(e)
   }
 })
 

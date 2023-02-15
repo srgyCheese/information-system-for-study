@@ -1,16 +1,16 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import Popup from '../../../components/Popup'
 import Spinner from '../../../components/Spinner'
 import { PopupContext } from '../../../contexts/PopupContext'
-import { useCategories, useCategoryAttributes } from '../../../queries/categoryQueries'
+import { useCategories } from '../../../queries/categoryQueries'
 import AddProductAttributesForm from './AddProductAttributesForm'
-import api from '../../../services/api'
 import { toast } from 'react-toastify'
+import { useAddProduct } from '../../../queries/productsQueries'
 
 const AddProductPopup = () => {
   const { closePopup } = useContext(PopupContext)
 
-  const [loading, setLoading] = useState(false)
+  const addProduct = useAddProduct()
   const [currentCategory, setCurrentCategory] = useState(null)
   const [attributesValues, setAttributesValues] = useState({})
 
@@ -56,33 +56,16 @@ const AddProductPopup = () => {
       })
     }
 
-    try {
-      setLoading(true)
-
-      const formData = new FormData()
-
-      formData.append('photo', photoRef.current.files[0])
-
-      const photoUrlRes = await api.post('/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      })
-
-      const {url} = photoUrlRes.data
-      
-      const newProduct = await api.post('/products/create', {
-        price,
-        title,
-        description,
-        category_id: currentCategory,
-        attributesValues,
-        photos: [url]
-      })
-
-      closePopup()
-    } catch (e) { }
-    setLoading(false)
+    addProduct.mutate({
+      price,
+      title,
+      description,
+      category_id: currentCategory,
+      attributesValues,
+      photos: [photoRef.current.files[0]]
+    }, {
+      onSuccess: closePopup
+    })
   }
 
   return (
@@ -150,8 +133,8 @@ const AddProductPopup = () => {
           />
         </>}
 
-        <button type="submit" className="btn btn-success mt-4" disabled={loading}>
-          {loading && <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>}
+        <button type="submit" className="btn btn-success mt-4" disabled={addProduct.isLoading}>
+          {addProduct.isLoading && <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>}
           Создать
         </button>
       </form>

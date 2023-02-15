@@ -3,7 +3,7 @@ const authMiddleware = require('../middlewares/auth.middleware')
 const sequelize = require('../models/sequelize')
 const router = Router()
 
-const {Category, ValueType, CategoryAttribute} = sequelize.models
+const {Category, ValueType, CategoryAttribute, ValuesSelectVariant} = sequelize.models
 
 router.get('/', async (req, res) => {
   try {
@@ -13,6 +13,7 @@ router.get('/', async (req, res) => {
       categories
     })
   } catch (e) {
+    console.log(e)
     res.status(500).json({ message: 'Что-то пошло не так' })
   }
 })
@@ -40,6 +41,9 @@ router.get('/attributes/:categoryId', async (req, res) => {
       include: [
         {
           model: ValueType
+        },
+        {
+          model: ValuesSelectVariant
         }
       ]
     })
@@ -156,18 +160,35 @@ router.post('/create', authMiddleware, async (req, res) => {
 
     if (req.body.values) {
       for (const el of req.body.values) {
-        await CategoryAttribute.create({
+        const valueType = await ValueType.findOne({
+          where: {
+            id: el.type
+          }
+        })
+
+        const categoryAttribute = await CategoryAttribute.create({
           title: el.title,
           ValueTypeId: el.type,
           CategoryId: category.id
         })
+
+        if (valueType.name == 'select' && el.variants) {
+          for (const selectVariant of el.variants) {
+            await ValuesSelectVariant.create({
+              title: selectVariant.value,
+              CategoryAttributeId: categoryAttribute.id
+            })
+          }
+        }
       }
     }
 
-    return res.send({
-      data: category,
-      message: 'Категория создана'
-    })
+    return setTimeout(() => {
+      res.send({
+        data: category,
+        message: 'Категория создана'
+      })
+    }, 2000)
   } catch (e) {
     console.log({e})
     res.status(500).json({ message: 'Что-то пошло не так' })

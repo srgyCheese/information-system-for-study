@@ -23,6 +23,18 @@ $primary: #fc8507;
   color: white !important;
 }
 
+.btn-outline-primary:hover {
+  color: white;
+}
+
+.btn-outline-primary:disabled {
+  color: white;
+}
+
+.btn-outline-primary:active {
+  color: white !important;
+}
+
 .cursor-pointer{
   cursor: pointer;
 }

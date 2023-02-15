@@ -6,11 +6,15 @@ const start = async () => {
   try {
     await sequelize.authenticate()
 
-    await sequelize.query('SET FOREIGN_KEY_CHECKS = 0')
+    if (process.env.DB_DRIVER == 'MYSQL') {
+      await sequelize.query('SET FOREIGN_KEY_CHECKS = 0')
+    }
 
     await sequelize.sync({ force: true })
 
-    await sequelize.query('SET FOREIGN_KEY_CHECKS = 1')
+    if (process.env.DB_DRIVER == 'MYSQL') {
+      await sequelize.query('SET FOREIGN_KEY_CHECKS = 1')
+    }
 
     const { User, Role, ValueType } = sequelize.models
 
@@ -31,6 +35,7 @@ const start = async () => {
       { title: 'Число', name: 'number' },
       { title: 'Есть/нет', name: 'bool' },
       { title: 'Строка', name: 'string' },
+      { title: 'Выбор', name: 'select' },
     ])
   } catch (e) {
     console.log('Ошибка : ', e)

@@ -9,6 +9,17 @@ const api = Axios.create({
 })
 
 api.__proto__.getData = (...args) => api.get(...args).then(res => res?.data)
+api.__proto__.addPhoto = async photo => {
+  const formData = new FormData()
+
+  formData.append('photo', photo)
+
+  return await api.post('/upload', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}
 
 api.interceptors.response.use((response) => response, (error) => {
   const serverMessage = error?.response?.data?.message
