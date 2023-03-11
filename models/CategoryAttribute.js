@@ -8,6 +8,9 @@ module.exports = sequelize => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    number_unit: {
+      type: DataTypes.STRING,
+    }
   }, { 
     sequelize, 
     modelName: 'CategoryAttribute',
@@ -21,7 +24,6 @@ module.exports = sequelize => {
     CategoryAttribute.belongsTo(ValueType)
     CategoryAttribute.hasMany(ProductValue)
     CategoryAttribute.hasMany(ValuesSelectVariant)
-    
 
     return CategoryAttribute
   }

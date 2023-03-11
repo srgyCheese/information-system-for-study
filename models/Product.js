@@ -19,11 +19,12 @@ module.exports = sequelize => {
   })
 
   return () => {
-    const {Category, ProductPhoto, ProductValue} = sequelize.models
+    const {Category, ProductPhoto, ProductValue, ProductPrice} = sequelize.models
   
     Product.belongsTo(Category)
     Product.hasMany(ProductPhoto)
     Product.hasMany(ProductValue)
+    Product.hasMany(ProductPrice)
   
     return Product  
   }  

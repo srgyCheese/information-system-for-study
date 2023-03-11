@@ -64,7 +64,7 @@ const Login = () => {
             />
           </div>
           <button type="submit" disabled={loading} className="btn btn-primary btn-block">
-            {loading && <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>}
+            {loading && <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>}
             Sign in
           </button>
         </form>

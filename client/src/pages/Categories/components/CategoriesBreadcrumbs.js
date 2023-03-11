@@ -2,24 +2,7 @@ import React, { useMemo } from 'react'
 import { useParams } from 'react-router'
 import { Link } from 'react-router-dom'
 import { useCategories } from '../../../queries/categoryQueries'
-
-const getBreadcrumbArray = (list, current) => {
-  const categories = []
-
-  if(!current || !list) {
-    return []
-  }
-
-  let lastCategory = list.find(el => el.id === +current)
-  categories.push(lastCategory)
-
-  while (lastCategory.parent_category_id != null) {
-    lastCategory = list.find(el => el.id === lastCategory.parent_category_id)
-    categories.push(lastCategory)
-  }
-
-  return categories.reverse()
-}
+import getBreadcrumbArray from '../../../services/getBreadcrumbsArray'
 
 const CategoriesBreadcrumbs = () => {
   const {isLoading, data} = useCategories()

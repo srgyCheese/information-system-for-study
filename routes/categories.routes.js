@@ -13,8 +13,7 @@ router.get('/', async (req, res) => {
       categories
     })
   } catch (e) {
-    console.log(e)
-    res.status(500).json({ message: 'Что-то пошло не так' })
+    next(e)
   }
 })
 
@@ -26,8 +25,7 @@ router.get('/value-types', async (req, res) => {
       valueTypes
     })
   } catch (e) {
-    console.log({e});
-    res.status(500).json({ message: 'Что-то пошло не так' })
+    next(e)
   }
 })
 
@@ -37,7 +35,7 @@ router.get('/attributes/:categoryId', async (req, res) => {
       where: {
         CategoryId: req.params.categoryId
       },
-      attributes: ['id', 'title'],
+      attributes: ['id', 'title', 'number_unit'],
       include: [
         {
           model: ValueType
@@ -52,8 +50,7 @@ router.get('/attributes/:categoryId', async (req, res) => {
       attributes
     })
   } catch (e) {
-    console.log({e});
-    res.status(500).json({ message: 'Что-то пошло не так' })
+    next(e)
   }
 })
 
@@ -76,7 +73,7 @@ router.get('/:categoryId', async (req, res) => {
       categories
     })
   } catch (e) {
-    res.status(500).json({ message: 'Что-то пошло не так' })
+    next(e)
   }
 })
 
@@ -100,7 +97,7 @@ router.delete('/:categoryId', async (req, res) => {
       success: true
     })
   } catch (e) {
-    res.status(500).json({ message: 'Что-то пошло не так' })
+    next(e)
   }
 })
 
@@ -166,10 +163,17 @@ router.post('/create', authMiddleware, async (req, res) => {
           }
         })
 
+        let numberUnit = null
+
+        if (valueType.name == 'number') {
+          numberUnit = el.number_unit
+        }
+
         const categoryAttribute = await CategoryAttribute.create({
           title: el.title,
           ValueTypeId: el.type,
-          CategoryId: category.id
+          CategoryId: category.id,
+          number_unit: numberUnit
         })
 
         if (valueType.name == 'select' && el.variants) {
@@ -182,16 +186,13 @@ router.post('/create', authMiddleware, async (req, res) => {
         }
       }
     }
-
-    return setTimeout(() => {
-      res.send({
-        data: category,
-        message: 'Категория создана'
-      })
-    }, 2000)
+ 
+    res.send({
+      data: category,
+      message: 'Категория создана'
+    })
   } catch (e) {
-    console.log({e})
-    res.status(500).json({ message: 'Что-то пошло не так' })
+    next(e)
   }
 })
 

@@ -64,7 +64,7 @@ const AddProductPopup = () => {
       attributesValues,
       photos: [photoRef.current.files[0]]
     }, {
-      onSuccess: closePopup
+      // onSuccess: closePopup
     })
   }
 
@@ -82,9 +82,9 @@ const AddProductPopup = () => {
         </select>
 
         {currentCategory && <>
-          <div class="mb-3 mt-3 row">
-            <div class="col-sm-2 col-form-label">Название</div>
-            <div class="col-sm-10">
+          <div className="mb-3 mt-3 row">
+            <div className="col-sm-2 col-form-label">Название</div>
+            <div className="col-sm-10">
               <input 
                 className="form-control" 
                 type="text"
@@ -93,9 +93,9 @@ const AddProductPopup = () => {
               />
             </div>
           </div>
-          <div class="mb-3 mt-3 row">
-            <div class="col-sm-2 col-form-label">Описание</div>
-            <div class="col-sm-10">
+          <div className="mb-3 mt-3 row">
+            <div className="col-sm-2 col-form-label">Описание</div>
+            <div className="col-sm-10">
               <textarea 
                 className="form-control" 
                 type="text"
@@ -104,20 +104,21 @@ const AddProductPopup = () => {
               />
             </div>
           </div>
-          <div class="mb-3 mt-3 row">
-            <div class="col-sm-2 col-form-label">Фото</div>
-            <div class="col-sm-10">
-              <input 
-                className="form-control" 
-                type="file" 
+          <div className="mb-3 mt-3 row">
+            <div className="col-sm-2 col-form-label">Фото</div>
+            <div className="col-sm-10">
+              <input
+                className="form-control"
+                type="file"
                 id="formFile"
                 ref={photoRef}
+                accept=".jpg, .jpeg, .png"
               />
             </div>
           </div>
-          <div class="mb-3 row">
-            <div class="col-sm-2 col-form-label">Цена</div>
-            <div class="col-sm-10">
+          <div className="mb-3 row">
+            <div className="col-sm-2 col-form-label">Цена</div>
+            <div className="col-sm-10">
               <input 
                 className="form-control" 
                 type="number"
@@ -126,7 +127,7 @@ const AddProductPopup = () => {
               />
             </div>
           </div>
-          <AddProductAttributesForm 
+          <AddProductAttributesForm
             currentCategory={currentCategory}
             attributesValues={attributesValues}
             setAttributesValues={setAttributesValues}

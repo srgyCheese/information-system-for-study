@@ -43,4 +43,10 @@ const useDeleteProduct = () => {
   })
 }
 
-export { useProducts, useAddProduct, useDeleteProduct }
+const useProduct = ({productId}) => {
+  return useQuery(['products', productId], () => {
+    return api.getData(`/products/${productId}`)
+  })
+}
+
+export { useProducts, useAddProduct, useDeleteProduct, useProduct }

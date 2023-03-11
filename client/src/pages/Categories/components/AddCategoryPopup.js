@@ -12,7 +12,7 @@ const SelectValuesArray = ({variants, setVariants}) => {
         <div className='d-flex mt-2 gap-2' key={variant.id}>
           <input 
             type="text"
-            class="form-control"
+            className="form-control"
             placeholder="Вариант"
             value={variant.value}
             onChange={e => {
@@ -99,6 +99,7 @@ const AddCategoryPopup = ({id}) => {
               className="form-control" 
               type="file" 
               id="formFile"
+              accept=".jpg, .jpeg, .png"
               ref={photoRef}
             />
           </div>
@@ -124,7 +125,7 @@ const AddCategoryPopup = ({id}) => {
         </div>
         {isCategoryForProducts && (
           <div>
-            <table class="table">
+            <table className="table">
               <thead>
                 <tr>
                   <th scope="col">Свойство</th>
@@ -136,17 +137,33 @@ const AddCategoryPopup = ({id}) => {
                 {categoryValues.map((val, i) => (
                   <tr key={val.id}>
                     <td style={{width: '50%'}}>
-                      <input 
-                        type="text" 
-                        className="form-control" 
-                        placeholder="Свойство"
-                        value={val.title}
-                        onChange={e => {
-                          categoryValues[i].title = e.target.value
+                      <div style={{display: 'flex'}}>
+                        <input 
+                          type="text" 
+                          className="form-control" 
+                          placeholder="Свойство"
+                          value={val.title}
+                          onChange={e => {
+                            categoryValues[i].title = e.target.value
 
-                          setCategoryValues([...categoryValues])
-                        }}
-                      />
+                            setCategoryValues([...categoryValues])
+                          }}
+                        />
+                        {getValueType(val.type).name === 'number' && (
+                          <input 
+                            type="text" 
+                            className="form-control" 
+                            placeholder="Ед. измерения"
+                            value={val.number_unit}
+                            onChange={e => {
+                              categoryValues[i].number_unit = e.target.value
+
+                              setCategoryValues([...categoryValues])
+                            }}
+                            style={{width: '20%', marginLeft: '10px'}}
+                          />
+                        )}
+                      </div>
                     </td>
                     <td>
                       <select 

@@ -47,8 +47,7 @@ router.post(
 
     res.json({ token })
   } catch (e) {
-    console.log(e)
-    res.status(500).json({ message: 'Что-то пошло не так' })
+    next(e)
   }
 })
 

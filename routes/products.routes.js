@@ -1,8 +1,18 @@
 const { Router } = require('express')
-const {check, validationResult} = require('express-validator')
+const { check, validationResult } = require('express-validator')
 const sequelize = require('../models/sequelize')
+const Sequelize = require('sequelize')
 
-const { Product, ProductPhoto, ProductValue, CategoryAttribute, ValueType } = sequelize.models
+const { 
+  Product, 
+  ProductPhoto, 
+  ProductValue, 
+  CategoryAttribute, 
+  ValueType, 
+  ProductPrice,
+  Category,
+  ValuesSelectVariant
+} = sequelize.models
 
 const router = Router()
 
@@ -13,7 +23,7 @@ router.post('/create', [
   check('description').notEmpty(),
   check('attributesValues').notEmpty(),
   check('category_id').notEmpty(),
-], async (req, res) => {
+], async (req, res, next) => {
   try {
     const errors = validationResult(req)
 
@@ -28,6 +38,10 @@ router.post('/create', [
       title: req.body.title,
       description: req.body.description,
       CategoryId: req.body.category_id
+    })
+
+    await product.createProductPrice({
+      value: req.body.price
     })
 
     for (let attrValueId of Object.keys(req.body.attributesValues)) {
@@ -51,40 +65,62 @@ router.post('/create', [
       ProductId: product.id
     })))
 
-    return res.send({product})
+    return res.send({ product })
   } catch (e) {
-    console.log(e)
-    res.status(500).json({ message: 'Что-то пошло не так' })
+    next(e)
   }
 })
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req, res, next) => {
   try {
     const product = await Product.findOne({
       where: {
         id: req.params.id,
       },
       include: [
-        { 
+        {
           model: ProductValue,
           include: [
             {
               model: CategoryAttribute,
               include: [{ model: ValueType }]
+            },
+            {
+              model: ValuesSelectVariant
             }
-          ] 
+          ]
+        },
+        {
+          model: ProductPhoto
+        },
+        {
+          model: ProductPrice,
+          attributes: []
         }
-      ]
+      ],
+      attributes: {
+        include: [
+          [Sequelize.literal(`(
+            SELECT value
+            FROM product_price
+            WHERE product_price.ProductId = Product.id
+            AND product_price.createdAt = (
+              SELECT MAX(product_price.createdAt) 
+              FROM product_price
+              WHERE product_price.ProductId = Product.id
+            )
+          )`), 'price']
+        ]
+      }
     })
 
-    return res.send({product})
+    return res.send({ product })
   } catch (e) {
-    console.log(e)
-    res.status(500).json({ message: 'Что-то пошло не так' })
+    next(e)
   }
 })
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', async (req, res, next) => {
   try {
     await ProductValue.destroy({
       where: {
@@ -108,22 +144,52 @@ router.delete('/:id', async (req, res) => {
       message: 'Товар удален'
     })
   } catch (e) {
-    console.log(e)
-    res.status(500).json({ message: 'Что-то пошло не так' })
+    next(e)
   }
 })
 
 router.get('/', async (req, res, next) => {
   try {
+    const searchOptions = {}
+
+    if (req.query?.category) {
+      searchOptions.CategoryId = req.query?.category
+    }
+
+    if (req.query?.title) {
+      searchOptions.title = {
+        [Sequelize.Op.like]: '%' + req.query?.title + '%'
+      }
+    }
+
     const products = await Product.findAll({
+      where: searchOptions,
       include: [
         {
           model: ProductPhoto
-        }
-      ]
+        },
+        {
+          model: ProductPrice,
+          attributes: []
+        },
+      ],
+      attributes: {
+        include: [
+          [Sequelize.literal(`(
+            SELECT value
+            FROM product_price
+            WHERE product_price.ProductId = Product.id
+            AND product_price.createdAt = (
+              SELECT MAX(product_price.createdAt) 
+              FROM product_price
+              WHERE product_price.ProductId = Product.id
+            )
+          )`), 'price']
+        ]
+      }
     })
 
-    return res.send({products})
+    return res.send({ products })
   } catch (e) {
     next(e)
   }

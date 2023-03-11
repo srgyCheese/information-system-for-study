@@ -1,6 +1,12 @@
-.container {
-  margin: auto;
-  max-width: 1080px;
+.object-fit-contain {
+  object-fit: contain;
+}
+
+.end-0 {
+  right: 0!important;
+}
+.bottom-0 {
+  bottom: 0!important;
 }
 
 $primary: #fc8507;

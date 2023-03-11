@@ -2,6 +2,7 @@ import Login from "./pages/Login/Login"
 import Categories from "./pages/Categories/Categories"
 import Profile from "./pages/Profile/Profile"
 import Products from "./pages/Products/Products"
+import Product from "./pages/Product/Product"
 
 const routes = [
   {
@@ -24,6 +25,10 @@ const routes = [
   {
     path: '/products',
     component: <Products />
+  },
+  {
+    path: '/products/:productId',
+    component: <Product />
   },
 ]
 

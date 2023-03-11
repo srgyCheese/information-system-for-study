@@ -1,0 +1,10 @@
+.short-product-card__image {
+  max-width: 400px;
+  max-height: 400px;
+}
+
+.short-product-card__image * {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}

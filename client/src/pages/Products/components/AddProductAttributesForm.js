@@ -7,7 +7,7 @@ const InputForAttribute = ({attribute, setValue, value}) => {
 
   switch (attribute.ValueType.name) {
     case 'number':
-      return (
+      return <>
         <input 
           type='number' 
           className='form-control' 
@@ -15,7 +15,8 @@ const InputForAttribute = ({attribute, setValue, value}) => {
           value={value} 
           onChange={e => setValue(e.target.value)}
         />
-      )
+        <div className='ms-3 fw-bold'>{attribute.number_unit}</div>
+      </>
     case 'bool':
       return (
         <input 
@@ -61,7 +62,7 @@ const AddProductAttributesForm = ({currentCategory, attributesValues, setAttribu
   }
 
   return (
-    <table class="table mt-2">
+    <table className="table mt-2">
       <thead>
         <tr>
           <th scope="col">Свойство</th>
@@ -78,9 +79,9 @@ const AddProductAttributesForm = ({currentCategory, attributesValues, setAttribu
             </td>
             <td>
               <div style={{display: 'flex', alignItems: 'center', height: '40px'}}>
-                <InputForAttribute 
-                  attribute={attr} 
-                  value={attributesValues[attr.id]} 
+                <InputForAttribute
+                  attribute={attr}
+                  value={attributesValues[attr.id]}
                   setValue={val => setAttributesValues({
                     ...attributesValues,
                     [attr.id]: val

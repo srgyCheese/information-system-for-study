@@ -1,21 +1,47 @@
-import React, { useContext } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useProducts } from '../../queries/productsQueries'
 import Spinner from '../Spinner'
-import ProductCard from './components/ProductCard'
+import './ProductsSearchList.scss'
+import { useCategories } from '../../queries/categoryQueries'
+import ProductsSearchBar from './components/ProductsSearchBar'
+import ProductsList from './components/ProductsList'
+import { useSearchParams } from 'react-router-dom'
 
 const ProductsSearchList = () => {
-  const productsQuery = useProducts()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const searchOptions = useMemo(() => Object.fromEntries(searchParams), [searchParams])
 
-  if (productsQuery.isLoading) {
+  const productsQuery = useProducts({
+    ...searchOptions
+  })
+  const categoriesQuery = useCategories()
+
+  if (categoriesQuery.isLoading) {
     return <Spinner />
   }
 
   return (
-    <div>
-      {
-        productsQuery.data?.products?.length 
-          ? productsQuery.data.products.map(product => <ProductCard product={product} />) 
-          : <h4>Нет товаров</h4>
+    <div className='products-container'>
+      <ProductsSearchBar
+        searchWithOptions={opt => {
+          const _options = {}
+          if (opt.title) {
+            _options.title = opt.title
+          }
+          if (opt.category) {
+            _options.category = opt.category
+          }
+          setSearchParams(_options)
+        }}
+        initOptions={searchOptions}
+        isLoading={productsQuery.isLoading}
+      />
+      
+      {productsQuery.isLoading
+        ? <Spinner />
+        : <ProductsList 
+            products={productsQuery.data?.products} 
+          />
       }
     </div>
   )
