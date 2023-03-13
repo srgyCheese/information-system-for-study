@@ -42,7 +42,8 @@ const Product = () => {
   return (
     <Layout>
       <ProductBreadcrumbs productId={productId} />
-      <h2>{product.title}</h2>
+      <h2 className='mb-0'>{product.title}</h2>
+      <p className='text-muted'>ID: {product.id}</p>
       <ProductShortCard product={product} />
       
       <h4 className='mt-3'>Характеристики</h4>

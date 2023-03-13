@@ -1,5 +1,4 @@
 import React from "react"
-// import 'bootstrap/dist/css/bootstrap.min.css'
 import './index.scss'
 import { BrowserRouter } from 'react-router-dom'
 import AppRouter from "./pages/AppRouter"
@@ -10,16 +9,25 @@ import { PopupContext } from "./contexts/PopupContext"
 import usePopup from "./hooks/usePopup"
 import { ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.min.css'
+import Spinner from "./components/Spinner"
  
 const queryClient = new QueryClient()
 
 function App() {
-  const {token, login, logout, ready, user} = useAuth()
+  const {token, login, logout, ready, user } = useAuth()
   const {openPopup, closePopup, popup} = usePopup()
   const isAuthenticated = !!token
 
   if (!ready) {
-    return 'Loading...'
+    return (
+      <Spinner />
+    )
+  }
+
+  if (isAuthenticated && !user) {
+    return (
+      <Spinner />
+    )
   }
 
   return (

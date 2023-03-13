@@ -5,7 +5,7 @@ const router = Router()
 
 const {Category, ValueType, CategoryAttribute, ValuesSelectVariant} = sequelize.models
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
   try {
     const categories = await Category.findAll()
 
@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
   }
 })
 
-router.get('/value-types', async (req, res) => {
+router.get('/value-types', async (req, res, next) => {
   try {
     const valueTypes = await ValueType.findAll()
 
@@ -29,7 +29,7 @@ router.get('/value-types', async (req, res) => {
   }
 })
 
-router.get('/attributes/:categoryId', async (req, res) => {
+router.get('/attributes/:categoryId', async (req, res, next) => {
   try {
     const attributes = await CategoryAttribute.findAll({
       where: {
@@ -54,7 +54,7 @@ router.get('/attributes/:categoryId', async (req, res) => {
   }
 })
 
-router.get('/:categoryId', async (req, res) => {
+router.get('/:categoryId', async (req, res, next) => {
   try {
     const categories = await Category.findAll({
       where: {
@@ -77,7 +77,7 @@ router.get('/:categoryId', async (req, res) => {
   }
 })
 
-router.delete('/:categoryId', async (req, res) => {
+router.delete('/:categoryId', async (req, res, next) => {
   try {
     const category = await Category.findOne({
       where: {
@@ -101,7 +101,7 @@ router.delete('/:categoryId', async (req, res) => {
   }
 })
 
-router.post('/create', authMiddleware, async (req, res) => {
+router.post('/create', authMiddleware, async (req, res, next) => {
   try {
     if (!req.body.title) {
       return res.status(400).json({

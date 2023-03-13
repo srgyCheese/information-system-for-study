@@ -10,7 +10,8 @@ module.exports = sequelize => {
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      unique: true,
     },
     phone: {
       type: DataTypes.STRING,
@@ -19,9 +20,8 @@ module.exports = sequelize => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    login: {
-      type: DataTypes.STRING,
-      allowNull: false
+    photo: {
+      type: DataTypes.STRING
     }
   }, {
     sequelize, 

@@ -1,5 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import api from "../services/api";
+import { useMutation, useQuery, useQueryClient } from "react-query"
+import api from "../services/api"
 
 const useProducts = (params) => {
   const path = ['products']

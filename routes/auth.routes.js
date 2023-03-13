@@ -11,10 +11,10 @@ const {User} = sequelize.models
 router.post(
   '/login',
   [
-    check('login', 'Минимальная длина никнейма 5 символов').isLength({ min: 5 }),
+    check('email', 'Добавьте email').notEmpty(),
     check('password', 'Минимальная длина пароля 6 символов').isLength({ min: 6 })
   ],
-  async (req, res) => {
+  async (req, res, next) => {
   try {
     const errors = validationResult(req)
 
@@ -25,9 +25,9 @@ router.post(
       })
     }
 
-    const {login, password} = req.body
+    const {email, password} = req.body
 
-    const user = await User.findOne({ where: {login} })
+    const user = await User.findOne({ where: {email} })
 
     if (!user) {
       return res.status(400).json({ message: 'Пользователь не найден' })

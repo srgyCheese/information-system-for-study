@@ -5,7 +5,7 @@ import api from '../../services/api'
 import { toast } from 'react-toastify'
 
 const Login = () => {
-  const [login, setLogin] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -14,8 +14,8 @@ const Login = () => {
   const submitHandler = async e => {
     e.preventDefault()
 
-    if (login.length < 5) {
-      return toast('Длина логина должна быть не менее 5 символов', {
+    if (!email?.length) {
+      return toast('Введите e-mail', {
         type: 'error'
       })
     }
@@ -30,7 +30,7 @@ const Login = () => {
       setLoading(true)
 
       const {data} = await api.post('/auth/login', {
-        login, password
+        email, password
       })
 
       auth.login(data.token)
@@ -44,17 +44,17 @@ const Login = () => {
       <div className='login-form shadow p-4 rounded'>
         <form onSubmit={submitHandler}>
           <div className="form-outline mb-4">
-            <label className="form-label">Login</label>
+            <label className="form-label">E-mail</label>
             <input 
               type="text" 
               className="form-control" 
-              onChange={e => setLogin(e.target.value)}
-              value={login}
+              onChange={e => setEmail(e.target.value)}
+              value={email}
             />
           </div>
         
           <div className="form-outline mb-4">
-            <label className="form-label">Password</label>
+            <label className="form-label">Пароль</label>
             <input 
               type="password" 
               id="formpassword" 
@@ -65,7 +65,7 @@ const Login = () => {
           </div>
           <button type="submit" disabled={loading} className="btn btn-primary btn-block">
             {loading && <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>}
-            Sign in
+            Войти
           </button>
         </form>
       </div>

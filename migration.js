@@ -18,16 +18,24 @@ const start = async () => {
 
     const { User, Role, ValueType } = sequelize.models
 
-    const adminRole = await Role.create({ name: 'admin' })
-    await Role.create({ name: 'user' })
+    const adminRole = await Role.create({ 
+      name: 'admin',
+      title: 'Администратор'
+    })
+    await Role.create({ 
+      name: 'counsel',
+      title: 'Продавец-консультант'
+    })
+    await Role.create({ 
+      name: 'manager',
+      title: 'Менеджер'
+    })
 
     await User.create({
-      login: 'admin',
       name: 'Админ Админовый Админович',
       phone: '+7 (999) 333 00 44',
       email: 'admin@gmail.com',
       password: bcrypt.hashSync('password', 8),
-      fio: 'Admin',
       RoleId: adminRole.id
     })
 
