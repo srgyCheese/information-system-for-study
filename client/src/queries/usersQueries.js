@@ -33,8 +33,39 @@ const useUser = (id, params) => {
   }, params)
 }
 
+const useUpdateUser = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation(async user => {
+    // const photoUrlRes = await api.addPhoto(user.photo)
+
+    // user.photo = photoUrlRes.data.url
+
+    return api.put(`/users/${user.id}`, user)
+  }, {
+    onSuccess: data => {
+      queryClient.setQueryData(['users', data.user?.id], data?.data?.user)
+      // queryClient.invalidateQueries('users')
+    },
+  })
+}
+
+const useDeleteUser = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation(async userId => {
+    return api.delete(`/users/${userId}`)
+  }, {
+    onSuccess: data => {
+      queryClient.invalidateQueries('users')
+    },
+  })
+}
+
 export {
   useAddUser,
   useUsers,
-  useUser
+  useUser,
+  useUpdateUser,
+  useDeleteUser
 }

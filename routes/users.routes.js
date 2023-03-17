@@ -113,4 +113,61 @@ router.get('/:userId', authMiddleware, async (req, res, next) => {
   }
 })
 
+router.put('/:userId', authMiddleware, async (req, res, next) => {
+  try {
+    const newUserParams = {}
+
+    if (req.body?.name) {
+      newUserParams.name = req.body.name
+    }
+
+    if (req.body?.phone) {
+      newUserParams.phone = req.body.phone
+    }
+
+    if (req.body?.email) {
+      newUserParams.email = req.body.email
+    }
+
+    if (!Object.keys(newUserParams)?.length) {
+      return res.status(403).send({
+        message: 'Не введены поля'
+      })
+    }
+
+    await User.update(newUserParams, {
+      where: {
+        id: req.params.userId
+      },
+    })
+
+    const user = await User.findOne({
+      where: {
+        id: req.params.userId
+      },
+      include: [
+        Role
+      ],
+    })
+
+    return res.send({user: user.makeJSON()})
+  } catch (e) {
+    next(e)
+  }
+})
+
+router.delete('/:userId', authMiddleware, async (req, res, next) => {
+  try {
+    await User.destroy({
+      where: {
+        id: req.params.userId
+      },
+    })
+
+    return res.send({message: 'Пользователь удалён'})
+  } catch (e) {
+    next(e)
+  }
+})
+
 module.exports = router

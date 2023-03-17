@@ -59,27 +59,6 @@ const Product = () => {
               </td>
             </tr>
           ))}
-          {/* {categoryAttributesQuery.data.attributes.map(attr => (
-            <tr key={attr.id}>
-              <td>
-                <label htmlFor={`add-product-value-${attr.id}`} style={{display: 'flex', alignItems: 'center', height: '40px'}}>
-                  {attr.title}
-                </label>
-              </td>
-              <td>
-                <div style={{display: 'flex', alignItems: 'center', height: '40px'}}>
-                  <InputForAttribute
-                    attribute={attr}
-                    value={attributesValues[attr.id]}
-                    setValue={val => setAttributesValues({
-                      ...attributesValues,
-                      [attr.id]: val
-                    })}
-                  />
-                </div>
-              </td>
-            </tr>
-          ))} */}
         </tbody>
       </table>
     </Layout>

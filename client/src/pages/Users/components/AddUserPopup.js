@@ -1,24 +1,14 @@
 import React, { useContext, useRef, useState } from 'react'
 import Popup from '../../../components/Popup'
-import Spinner from '../../../components/Spinner'
 import { PopupContext } from '../../../contexts/PopupContext'
 import { toast } from 'react-toastify'
-import { useAddCategory } from '../../../queries/categoryQueries'
 import { useAddUser } from '../../../queries/usersQueries'
-
-const roles = [
-  {
-    title: 'Продавец-консультант',
-    name: 'counsel'
-  },
-  {
-    title: 'Менеджер',
-    name: 'manager'
-  },
-]
+import { usePermissions } from '../../../hooks/usePermissions'
+import { rolesList } from '../../../services/roles'
 
 const AddUserPopup = () => {
   const { closePopup } = useContext(PopupContext)
+  const permissions = usePermissions()
   const addUser = useAddUser()
 
   const [name, setName] = useState('')
@@ -27,6 +17,8 @@ const AddUserPopup = () => {
   const [password, setPassword] = useState('')
   const [role, setRole] = useState(null)
   const photoRef = useRef()
+
+  const roles = rolesList.filter(role => permissions.lowerRoles().includes(role.name))
 
   const submitHandler = async e => {
     e.preventDefault()
