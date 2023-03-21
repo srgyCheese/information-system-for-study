@@ -1,0 +1,67 @@
+.choose-city {
+  .items-wrapper {
+    display: flex;
+    flex-grow: 1;
+    height: 450px;
+    justify-content: space-between;
+    margin-top: 10px;
+    position: relative;
+
+    .items {
+      margin-bottom: 0;
+      margin-top: 16px;
+      min-height: 1px;
+      overflow: auto;
+      padding: 0;
+      width: 100%;
+
+      li {
+        padding: 10px 1em 10px 16px;
+        cursor: pointer;
+        position: relative;
+      }
+
+      li:hover {
+        color: #fc8507;
+      }
+
+      li.active {
+        color: #fc8507;
+        background-color: #fffceb;
+      }
+
+      li.active::before {
+        background-color: rgba(255,115,0,.9);
+        content: "";
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 3px;
+      }
+    }
+
+    .items::before {
+      padding-left: 16px;
+      display: block;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0;
+      position: absolute;
+      top: -12px;
+      z-index: 9;
+    }
+
+    .districts-items::before {
+      content: "Округ";
+    }
+
+    .regions-items::before {
+      content: "Регион";
+    }
+
+    .cities-items::before {
+      content: "Город";
+    }
+  }
+}

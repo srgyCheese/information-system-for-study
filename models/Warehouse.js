@@ -8,14 +8,10 @@ module.exports = sequelize => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    x: {
+    address: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    y: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    }
   }, { 
     sequelize, 
     modelName: 'Warehouse',
@@ -23,7 +19,9 @@ module.exports = sequelize => {
   })
 
   return () => {
-
+    const {City} = sequelize.models
+    
+    Warehouse.belongsTo(City)
     
     return Warehouse
   }

@@ -1,6 +1,7 @@
 require('dotenv').config()
 const bcrypt = require('bcryptjs')
 const sequelize = require('./models/sequelize')
+// const cityList = require('./city-list.json').data
 
 const start = async () => {
   try {
@@ -45,6 +46,11 @@ const start = async () => {
       { title: 'Строка', name: 'string' },
       { title: 'Выбор', name: 'select' },
     ])
+
+    // const { City, Region, District } = sequelize.models
+
+    // await District.bulkCreate(cityList.districts)
+
   } catch (e) {
     console.log('Ошибка : ', e)
   }

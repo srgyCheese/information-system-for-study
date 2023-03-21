@@ -18,8 +18,18 @@ app.use('/api/auth', require('./routes/auth.routes'))
 app.use('/api/users', require('./routes/users.routes'))
 app.use('/api/categories', require('./routes/categories.routes'))
 app.use('/api/products', require('./routes/products.routes'))
+app.use('/api/geo', require('./routes/geo.routes'))
+app.use('/api/warehouses', require('./routes/warehouses.routes'))
 
 app.use('/api/upload', require('./routes/upload.routes'))
+
+if (process.env.NODE_ENV === 'production') {
+  app.use('/', express.static(path.join(__dirname, 'client', 'build')))
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+  })
+}
 
 app.use(errorHanderMiddleware)
 

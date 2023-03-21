@@ -22,7 +22,7 @@ router.get('/current-user', authMiddleware, async (req, res) => {
 })
 
 router.post('/create', 
-  authMiddleware, 
+  authMiddleware,
   [
     check('email').notEmpty(),
     check('photo').notEmpty(),
@@ -107,7 +107,7 @@ router.get('/:userId', authMiddleware, async (req, res, next) => {
       ]
     })
 
-    return res.send({user})
+    return res.send({user: user.makeJSON()})
   } catch (e) {
     next(e)
   }
@@ -127,6 +127,10 @@ router.put('/:userId', authMiddleware, async (req, res, next) => {
 
     if (req.body?.email) {
       newUserParams.email = req.body.email
+    }
+
+    if (req.body?.password) {
+      newUserParams.password = await bcrypt.hash(req.body.password, 8)
     }
 
     if (!Object.keys(newUserParams)?.length) {
