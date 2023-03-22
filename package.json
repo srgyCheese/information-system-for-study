@@ -5,6 +5,7 @@
     "client": "npm run start --prefix client",
     "client:install": "npm install --prefix client",
     "client:build": "npm run build --prefix client",
+    "fill-database": "node migration && node cityListToDB",
     "dev": "cross-env NODE_ENV=development npx concurrently \"npm run server\" \"npm run client\""
   },
   "dependencies": {
