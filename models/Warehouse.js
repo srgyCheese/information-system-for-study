@@ -19,9 +19,10 @@ module.exports = sequelize => {
   })
 
   return () => {
-    const {City} = sequelize.models
+    const {City, ProductItem} = sequelize.models
     
     Warehouse.belongsTo(City)
+    Warehouse.hasMany(ProductItem)
     
     return Warehouse
   }

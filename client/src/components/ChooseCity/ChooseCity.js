@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Scrollbars } from 'react-custom-scrollbars-2';
 import { useGeoList } from '../../queries/geoQueries'
 import './ChooseCity.scss'
 
@@ -18,37 +19,43 @@ const ChooseCity = ({cityId, setCityId}) => {
     <div className="choose-city">
       <div className='items-wrapper'>
         <ul className='items districts-items'>
-          {geoQuery.data.districts.map(district => (
-            <li 
-              key={district.id} 
-              onClick={e => setCurrentDistrict(district.id)} 
-              className={`${district.id == currentDistrict ? 'active' : ''}`}
-            >
-              {district.title}
-            </li>
-          ))}
+          <Scrollbars>
+            {geoQuery.data.districts.map(district => (
+              <li 
+                key={district.id} 
+                onClick={e => setCurrentDistrict(district.id)} 
+                className={`${district.id == currentDistrict ? 'active' : ''}`}
+              >
+                {district.title}
+              </li>
+            ))}
+          </Scrollbars>
         </ul>
         <ul className='items regions-items'>
-          {regions && regions.map(region => (
-            <li 
-              key={region.id}
-              onClick={e => setCurrentRegion(region.id)} 
-              className={`${region.id == currentRegion ? 'active' : ''}`}
-            >
-              {region.title}
-            </li>
-          ))}
+          <Scrollbars>
+            {regions && regions.map(region => (
+              <li 
+                key={region.id}
+                onClick={e => setCurrentRegion(region.id)} 
+                className={`${region.id == currentRegion ? 'active' : ''}`}
+              >
+                {region.title}
+              </li>
+            ))}
+          </Scrollbars>
         </ul>
         <ul className='items cities-items'>
-          {cities && cities.map(city => (
-            <li 
-              key={city.id}
-              onClick={e => setCityId(city.id)} 
-              className={`${city.id == cityId ? 'active' : ''}`}
-            >
-              {city.title}
-            </li>
-          ))}
+          <Scrollbars>
+            {cities && cities.map(city => (
+              <li 
+                key={city.id}
+                onClick={e => setCityId(city.id)} 
+                className={`${city.id == cityId ? 'active' : ''}`}
+              >
+                {city.title}
+              </li>
+            ))}
+          </Scrollbars>
         </ul>
       </div>
     </div>

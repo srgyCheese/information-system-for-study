@@ -12,7 +12,24 @@ const {
 router.get('/', authMiddleware, async (req, res, next) => {
   try {
     return res.send({
-      warehouses: await Warehouse.findAll()
+      warehouses: await Warehouse.findAll({
+        include: [City]
+      })
+    })
+  } catch (e) {
+    next(e)
+  }
+})
+
+router.get('/:warehouseId', authMiddleware, async (req, res, next) => {
+  try {
+    return res.send({
+      warehouse: await Warehouse.findOne({
+        where: {
+          id: req.params.warehouseId
+        },
+        include: [City]
+      })
     })
   } catch (e) {
     next(e)

@@ -5,11 +5,15 @@ import { useUpdateUser, useUser } from '../../queries/usersQueries'
 import Spinner from '../../components/Spinner'
 import EditUserCard from './components/EditUserCard'
 import { toast } from 'react-toastify'
+import { useTitle } from '../../hooks/useTitle'
 
 const EditUser = () => {
   const { userId } = useParams()
   const navigate = useNavigate()
   const userQuery = useUser(userId)
+
+  useTitle(`Изменить ${userQuery?.data?.user && userQuery?.data?.user?.name}`)
+  
   const updateUser = useUpdateUser()
   const [editedUser, setEditedUser] = useState()
 

@@ -152,13 +152,13 @@ router.get('/', async (req, res, next) => {
   try {
     const searchOptions = {}
 
-    if (req.query?.category) {
-      searchOptions.CategoryId = req.query?.category
+    if (req.query.category) {
+      searchOptions.CategoryId = req.query.category
     }
 
-    if (req.query?.title) {
+    if (req.query.title) {
       searchOptions.title = {
-        [Sequelize.Op.like]: '%' + req.query?.title + '%'
+        [Sequelize.Op.like]: '%' + req.query.title + '%'
       }
     }
 

@@ -64,7 +64,7 @@ const AddProductPopup = () => {
       attributesValues,
       photos: [photoRef.current.files[0]]
     }, {
-      // onSuccess: closePopup
+      onSuccess: closePopup
     })
   }
 

@@ -7,6 +7,7 @@ import Warehouses from "./pages/Warehouses/Warehouses"
 import Users from "./pages/Users/Users"
 import User from "./pages/User/User"
 import EditUser from "./pages/EditUser/EditUser"
+import Warehouse from "./pages/Warehouse/Warehouse"
 
 const routes = [
   {
@@ -37,6 +38,10 @@ const routes = [
   {
     path: '/warehouses',
     component: <Warehouses />
+  },
+  {
+    path: '/warehouses/:warehouseId',
+    component: <Warehouse />
   },
   {
     path: '/users',

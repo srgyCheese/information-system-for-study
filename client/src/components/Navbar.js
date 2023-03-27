@@ -12,7 +12,7 @@ const Navbar = () => {
           <img src="/assets/svg/logo.svg" width="100" className="d-inline-block align-top" alt="logo" />
         </Link>
         <div className="d-flex">
-          <span className="text-light cursor-pointer fs-5" onClick={e => auth.logout()}>Log out</span>
+          <span className="text-light cursor-pointer fs-5" onClick={e => auth.logout()}>Выйти</span>
         </div>
       </div>
     </nav>

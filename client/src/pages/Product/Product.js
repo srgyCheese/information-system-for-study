@@ -6,12 +6,15 @@ import Spinner from '../../components/Spinner'
 import { useCategories } from '../../queries/categoryQueries'
 import ProductBreadcrumbs from './components/ProductBreadCrumbs'
 import ProductShortCard from './components/ProductShortCard'
+import { useTitle } from '../../hooks/useTitle'
 
 const Product = () => {
   const {productId} = useParams()
 
   const categoriesQuery = useCategories()
   const productQuery = useProduct({productId})
+  
+  useTitle(productQuery?.data?.product?.title)
 
   if (productQuery?.isLoading || categoriesQuery.isLoading) {
     return (

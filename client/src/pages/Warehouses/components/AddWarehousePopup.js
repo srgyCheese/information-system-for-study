@@ -40,7 +40,7 @@ const AddWarehousePopup = () => {
       })
     }
 
-    if (!setCityId) {
+    if (!cityId) {
       return toast('Выберите город', {
         type: 'error'
       })

@@ -117,23 +117,23 @@ router.put('/:userId', authMiddleware, async (req, res, next) => {
   try {
     const newUserParams = {}
 
-    if (req.body?.name) {
+    if (req.body.name) {
       newUserParams.name = req.body.name
     }
 
-    if (req.body?.phone) {
+    if (req.body.phone) {
       newUserParams.phone = req.body.phone
     }
 
-    if (req.body?.email) {
+    if (req.body.email) {
       newUserParams.email = req.body.email
     }
 
-    if (req.body?.password) {
+    if (req.body.password) {
       newUserParams.password = await bcrypt.hash(req.body.password, 8)
     }
 
-    if (!Object.keys(newUserParams)?.length) {
+    if (!Object.keys(newUserParams).length) {
       return res.status(403).send({
         message: 'Не введены поля'
       })

@@ -115,7 +115,7 @@ router.post('/create', authMiddleware, async (req, res, next) => {
       })
     }
 
-    let parent_category_id = req?.body?.parent_category_id
+    let parent_category_id = req.body.parent_category_id
 
     if (parent_category_id == undefined) {
       parent_category_id = null

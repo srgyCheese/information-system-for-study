@@ -2,11 +2,13 @@ import React, { useContext, useEffect, useState } from 'react'
 import Layout from '../../components/Layout'
 import Spinner from '../../components/Spinner'
 import { PopupContext } from '../../contexts/PopupContext'
+import { useTitle } from '../../hooks/useTitle'
 import AddUserPopup from './components/AddUserPopup'
 import UsersList from './components/UsersList'
 
 const Users = () => {
   const {openPopup} = useContext(PopupContext)
+  useTitle('Сотрудники')
 
   return (
     <Layout>

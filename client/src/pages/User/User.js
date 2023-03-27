@@ -5,11 +5,15 @@ import { useDeleteUser, useUser } from '../../queries/usersQueries'
 import Spinner from '../../components/Spinner'
 import UserCard from './components/UserCard'
 import { usePermissions } from '../../hooks/usePermissions'
+import { useTitle } from '../../hooks/useTitle'
 
 const User = () => {
   const {userId} = useParams()
   const permissions = usePermissions()
   const userQuery = useUser(userId)
+
+  useTitle(userQuery?.data?.user?.name)
+
   const deleteUserQuery = useDeleteUser()
   const navigate = useNavigate()
 

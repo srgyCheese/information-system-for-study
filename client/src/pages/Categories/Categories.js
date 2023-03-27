@@ -7,12 +7,18 @@ import { useCategories } from '../../queries/categoryQueries'
 import AddCategoryPopup from './components/AddCategoryPopup'
 import CategoriesList from './components/CategoriesList'
 import CategoriesBreadcrumbs from './components/CategoriesBreadcrumbs'
+import { useTitle } from '../../hooks/useTitle'
 
 const Categories = () => {
   const {id} = useParams()
 
   const {isLoading, data} = useCategories()
   const navigate = useNavigate()
+
+  const currentCategory = data?.categories?.find(el => el.id == +id)
+
+  useTitle(id ? currentCategory?.title : 'Категории')
+
   const {openPopup} = useContext(PopupContext)
 
   if (isLoading) {
@@ -22,8 +28,6 @@ const Categories = () => {
       </Layout>
     )
   }
-
-  const currentCategory = data?.categories?.find(el => el.id == +id)
 
   const currentCategoryChilds = data?.categories?.filter(cat => cat.parent_category_id == id)?.map(cat => ({...cat, hasChild: data.categories.findIndex(c => c.parent_category_id === cat.id) != -1}))
 

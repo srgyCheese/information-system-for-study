@@ -3,8 +3,11 @@ import './Login.scss'
 import { AuthContext } from '../../contexts/AuthContext'
 import api from '../../services/api'
 import { toast } from 'react-toastify'
+import { useTitle } from '../../hooks/useTitle'
 
 const Login = () => {
+  useTitle('Вход')
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)

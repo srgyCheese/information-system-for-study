@@ -45,6 +45,10 @@ const useDeleteProduct = () => {
 
 const useProduct = ({productId}) => {
   return useQuery(['products', productId], () => {
+    if (!productId) {
+      return null
+    }
+
     return api.getData(`/products/${productId}`)
   })
 }

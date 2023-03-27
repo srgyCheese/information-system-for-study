@@ -2,8 +2,11 @@ import React, { useContext, useEffect, useState } from 'react'
 import Layout from '../../components/Layout'
 import Spinner from '../../components/Spinner'
 import { AuthContext } from '../../contexts/AuthContext'
+import { useTitle } from '../../hooks/useTitle'
 
 const Profile = () => {
+  useTitle('Профиль')
+
   const { user } = useContext(AuthContext)
 
   if (!user) {

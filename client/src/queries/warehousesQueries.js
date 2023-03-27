@@ -21,7 +21,16 @@ const useWarehouses = () => {
   })
 }
 
+const useWarehouse = (id) => {
+  const path = ['warehouses', id]
+
+  return useQuery(path, () => {
+    return api.getData(`/warehouses/${id}`)
+  })
+}
+
 export {
-    useAddWarehouse,
-    useWarehouses,
+  useAddWarehouse,
+  useWarehouses,
+  useWarehouse,
 }
