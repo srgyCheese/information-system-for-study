@@ -49,6 +49,14 @@ export const usePermissions = () => {
     return false
   }
 
+  const canChangeProducts = () => {
+    if (user.Role.name == roles.ADMIN || user.Role.name == roles.MANAGER) {
+      return true
+    }
+
+    return false
+  }
+
   const lowerRoles = () => {
     if (user.Role.name == roles.ADMIN) {
       return [
@@ -70,6 +78,7 @@ export const usePermissions = () => {
     canChangeUser, 
     canChangeRoleTo, 
     canDeleteUser,
-    lowerRoles
+    lowerRoles,
+    canChangeProducts
   }
 }

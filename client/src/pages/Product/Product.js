@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import Layout from '../../components/Layout'
 import { useProduct } from '../../queries/productsQueries'
@@ -7,13 +7,31 @@ import { useCategories } from '../../queries/categoryQueries'
 import ProductBreadcrumbs from './components/ProductBreadCrumbs'
 import ProductShortCard from './components/ProductShortCard'
 import { useTitle } from '../../hooks/useTitle'
+import EditProductShortCard from './components/EditProductShortCard'
+
+const getValue = (productValue) => {
+  const valueType = productValue.CategoryAttribute.ValueType
+
+  switch (valueType.name) {
+    case 'bool':
+      return !!productValue[valueType.name] ? 'есть' : 'нет'
+    case 'number':
+      return `${productValue[valueType.name]} ${productValue.CategoryAttribute.number_unit}`
+    case 'select':
+      return productValue.ValuesSelectVariant.title
+    case 'string':
+    default:
+      return productValue[valueType.name]
+  }
+}
 
 const Product = () => {
-  const {productId} = useParams()
+  const { productId } = useParams()
 
   const categoriesQuery = useCategories()
-  const productQuery = useProduct({productId})
-  
+  const productQuery = useProduct({ productId })
+  const [isProductEditing, setIsProductEditing] = useState(false)
+
   useTitle(productQuery?.data?.product?.title)
 
   if (productQuery?.isLoading || categoriesQuery.isLoading) {
@@ -24,31 +42,23 @@ const Product = () => {
     )
   }
 
-  const {product} = productQuery.data
+  const { product } = productQuery.data
 
-  const getValue = (productValue) => {
-    const valueType = productValue.CategoryAttribute.ValueType
-
-    switch (valueType.name) {
-      case 'bool':
-        return !!productValue[valueType.name] ? 'есть' : 'нет'
-      case 'number':
-        return `${productValue[valueType.name]} ${productValue.CategoryAttribute.number_unit}`
-      case 'select':
-        return productValue.ValuesSelectVariant.title
-      case 'string':
-      default:
-        return productValue[valueType.name]
-    }
-  }
-  
   return (
     <Layout>
       <ProductBreadcrumbs productId={productId} />
-      <h2 className='mb-0'>{product.title}</h2>
       <p className='text-muted'>ID: {product.id}</p>
-      <ProductShortCard product={product} />
-      
+      {isProductEditing ? 
+        <EditProductShortCard 
+          product={product}
+          cancelEdit={() => setIsProductEditing(false)}
+        /> :
+        <ProductShortCard 
+          product={product}
+          startEdit={() => setIsProductEditing(true)}
+        />
+      }
+
       <h4 className='mt-3'>Характеристики</h4>
       <table className="table">
         <tbody>

@@ -3,12 +3,12 @@ const { check, validationResult } = require('express-validator')
 const sequelize = require('../models/sequelize')
 const Sequelize = require('sequelize')
 
-const { 
-  Product, 
-  ProductPhoto, 
-  ProductValue, 
-  CategoryAttribute, 
-  ValueType, 
+const {
+  Product,
+  ProductPhoto,
+  ProductValue,
+  CategoryAttribute,
+  ValueType,
   ProductPrice,
   Category,
   ValuesSelectVariant
@@ -77,26 +77,24 @@ router.get('/:id', async (req, res, next) => {
       where: {
         id: req.params.id,
       },
-      include: [
-        {
-          model: ProductValue,
-          include: [
-            {
-              model: CategoryAttribute,
-              include: [{ model: ValueType }]
-            },
-            {
-              model: ValuesSelectVariant
-            }
-          ]
+      include: [{
+        model: ProductValue,
+        include: [{
+          model: CategoryAttribute,
+          include: [{ model: ValueType }]
         },
         {
-          model: ProductPhoto
-        },
-        {
-          model: ProductPrice,
-          attributes: []
+          model: ValuesSelectVariant
         }
+        ]
+      },
+      {
+        model: ProductPhoto
+      },
+      {
+        model: ProductPrice,
+        attributes: []
+      }
       ],
       attributes: {
         include: [
@@ -148,6 +146,84 @@ router.delete('/:id', async (req, res, next) => {
   }
 })
 
+router.put('/:productId', async (req, res, next) => {
+  try {
+    const {productId} = req.params
+
+    const newProductParams = {}
+
+    if (req.body.title) {
+      newProductParams.title = req.body.title
+    }
+
+    if (req.body.description) {
+      newProductParams.description = req.body.description
+    }
+
+    if (req.body.price) {
+      await ProductPrice.create({
+        value: req.body.price,
+        ProductId: productId
+      })
+    }
+
+    if (!Object.keys(newProductParams).length && !req.body.price) {
+      return res.status(403).send({
+        message: 'Не введены поля'
+      })
+    }
+
+    await Product.update(newProductParams, {
+      where: {
+        id: productId
+      },
+    })
+
+    const product = await Product.findOne({
+      where: {
+        id: productId,
+      },
+      include: [{
+        model: ProductValue,
+        include: [{
+          model: CategoryAttribute,
+          include: [{ model: ValueType }]
+        },
+        {
+          model: ValuesSelectVariant
+        }
+        ]
+      },
+      {
+        model: ProductPhoto
+      },
+      {
+        model: ProductPrice,
+        attributes: []
+      }
+      ],
+      attributes: {
+        include: [
+          [Sequelize.literal(`(
+            SELECT value
+            FROM product_price
+            WHERE product_price.ProductId = Product.id
+            AND product_price.createdAt = (
+              SELECT MAX(product_price.createdAt) 
+              FROM product_price
+              WHERE product_price.ProductId = Product.id
+            )
+          )`), 'price']
+        ]
+      }
+    })
+
+    return res.send({product})
+  } catch (e) {
+    next(e)
+  }
+})
+
 router.get('/', async (req, res, next) => {
   try {
     const searchOptions = {}
@@ -164,14 +240,13 @@ router.get('/', async (req, res, next) => {
 
     const products = await Product.findAll({
       where: searchOptions,
-      include: [
-        {
-          model: ProductPhoto
-        },
-        {
-          model: ProductPrice,
-          attributes: []
-        },
+      include: [{
+        model: ProductPhoto
+      },
+      {
+        model: ProductPrice,
+        attributes: []
+      },
       ],
       attributes: {
         include: [
