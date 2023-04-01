@@ -37,10 +37,6 @@ const useUpdateUser = () => {
   const queryClient = useQueryClient()
 
   return useMutation(async user => {
-    // const photoUrlRes = await api.addPhoto(user.photo)
-
-    // user.photo = photoUrlRes.data.url
-
     return api.put(`/users/${user.id}`, user)
   }, {
     onSuccess: data => {

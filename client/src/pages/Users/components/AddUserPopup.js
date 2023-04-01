@@ -47,6 +47,12 @@ const AddUserPopup = () => {
       })
     }
 
+    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+      return toast('Неправильный формат e-mail', {
+        type: 'error'
+      })
+    }
+
     if (!role) {
       return toast('Нет введена роль', {
         type: 'error'
@@ -70,8 +76,8 @@ const AddUserPopup = () => {
       <form onSubmit={submitHandler}>
         <div className="form-outline mb-3">
           <label className="form-label">Фото пользователя</label>
-          <input 
-            className="form-control" 
+          <input
+            className="form-control"
             type="file"
             accept=".jpg, .jpeg, .png"
             ref={photoRef}
@@ -79,44 +85,44 @@ const AddUserPopup = () => {
         </div>
         <div className="form-outline mb-3">
           <label className="form-label">ФИО</label>
-          <input 
-            type="text" 
-            className="form-control" 
+          <input
+            type="text"
+            className="form-control"
             onChange={e => setName(e.target.value)}
             value={name}
           />
         </div>
         <div className="form-outline mb-3">
           <label className="form-label">Номер телефона</label>
-          <input 
-            type="text" 
-            className="form-control" 
+          <input
+            type='tel'
+            className="form-control"
             onChange={e => setPhone(e.target.value)}
             value={phone}
           />
         </div>
         <div className="form-outline mb-3">
           <label className="form-label">E-mail</label>
-          <input 
+          <input
             type="text"
-            className="form-control" 
+            className="form-control"
             onChange={e => setEmail(e.target.value)}
             value={email}
           />
         </div>
         <div className="form-outline mb-3">
           <label className="form-label">Пароль</label>
-          <input 
-            type="text" 
-            className="form-control" 
+          <input
+            type="text"
+            className="form-control"
             onChange={e => setPassword(e.target.value)}
             value={password}
           />
         </div>
         <div className="form-outline">
           <label className="form-label">Роль</label>
-          
-          <select 
+
+          <select
             className="form-select"
             value={role}
             onChange={e => setRole(e.target.value)}

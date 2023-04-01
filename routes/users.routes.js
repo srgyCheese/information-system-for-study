@@ -24,7 +24,7 @@ router.get('/current-user', authMiddleware, async (req, res) => {
 router.post('/create', 
   authMiddleware,
   [
-    check('email').notEmpty(),
+    check('email').notEmpty().isEmail(),
     check('photo').notEmpty(),
     check('role').notEmpty(),
     check('name').notEmpty(),
@@ -106,6 +106,10 @@ router.get('/:userId', authMiddleware, async (req, res, next) => {
         Role
       ]
     })
+
+    if (!user) {
+      return res.send({user: null})
+    }
 
     return res.send({user: user.makeJSON()})
   } catch (e) {

@@ -22,7 +22,7 @@ const ProductsSearchBar = ({ searchWithOptions, isLoading, initOptions }) => {
   }
 
   return (
-    <div className="mb-3 mt-3">
+    <div className="mb-3">
       <form className='d-flex gap-2' onSubmit={submitHander}>
         <input
           className='form-control'

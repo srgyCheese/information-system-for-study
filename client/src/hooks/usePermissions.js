@@ -5,6 +5,14 @@ import { roles } from "../services/roles"
 export const usePermissions = () => {
   const {user} = useContext(AuthContext)
 
+  const _adminOrManager = () => {
+    if (user.Role.name == roles.ADMIN || user.Role.name == roles.MANAGER) {
+      return true
+    }
+
+    return false
+  }
+
   const canChangeUser = otherUser => {
     if (user.Role.name == roles.ADMIN) {
       return true
@@ -74,11 +82,25 @@ export const usePermissions = () => {
     return null
   }
 
+  const canAddUser = _adminOrManager
+
+  const canAddWarehouse = _adminOrManager
+
+  const canChangeCategory = _adminOrManager
+  const canAddCategory = _adminOrManager
+
+  const canAddProduct = _adminOrManager
+
   return {
     canChangeUser, 
     canChangeRoleTo, 
     canDeleteUser,
     lowerRoles,
-    canChangeProducts
+    canChangeProducts,
+    canAddUser,
+    canAddWarehouse,
+    canAddCategory,
+    canChangeCategory,
+    canAddProduct
   }
 }

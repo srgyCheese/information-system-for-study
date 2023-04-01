@@ -8,6 +8,7 @@ import AddCategoryPopup from './components/AddCategoryPopup'
 import CategoriesList from './components/CategoriesList'
 import CategoriesBreadcrumbs from './components/CategoriesBreadcrumbs'
 import { useTitle } from '../../hooks/useTitle'
+import { usePermissions } from '../../hooks/usePermissions'
 
 const Categories = () => {
   const {id} = useParams()
@@ -20,6 +21,7 @@ const Categories = () => {
   useTitle(id ? currentCategory?.title : 'Категории')
 
   const {openPopup} = useContext(PopupContext)
+  const permissions = usePermissions()
 
   if (isLoading) {
     return (
@@ -44,13 +46,15 @@ const Categories = () => {
           >
             Добавить Продукт
           </button> 
-        : <button 
+        : permissions.canAddCategory() && (
+          <button 
             type="button" 
             className="btn btn-outline-success"
             onClick={() => openPopup(<AddCategoryPopup id={id} />)}
           >
             Добавить Категорию
           </button>
+        )
       }
       <div className="d-flex">
 
