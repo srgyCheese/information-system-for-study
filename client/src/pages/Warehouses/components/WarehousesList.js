@@ -18,9 +18,9 @@ const WarehousesList = () => {
   return (
     <div>
       {warehousesQuery.data.warehouses.map(warehouse => (
-        <div className='card mb-3'>
+        <div className='card mb-3' key={warehouse.id}>
           <div className='card-body'>
-            <h5 class="card-title cursor-pointer" onClick={() => navigate(`/warehouses/${warehouse.id}`)}>{warehouse.title}</h5>
+            <h5 className="card-title cursor-pointer" onClick={() => navigate(`/warehouses/${warehouse.id}`)}>{warehouse.title}</h5>
             <div className='text-muted'>{warehouse.address}</div>
           </div>
         </div>

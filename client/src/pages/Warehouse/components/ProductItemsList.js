@@ -19,7 +19,7 @@ const ProductItemsList = ({warehouseId}) => {
   return (
     <div>
       {productItems.map(productItem => (
-        <div className="card">
+        <div className="card" key={productItem.id}>
           <div className="d-flex">
             <div style={{ height: '176px', width: '160px' }}>
               <img src={productItem.Product.ProductPhotos[0].url} className="img-fluid rounded-start h-100 w-100 object-fit-contain" />
