@@ -28,6 +28,17 @@ export const useAuth = () => {
       login(data.token)
     }
 
+    
+    api.interceptors.response.use((response) => response, (error) => {
+      const responseCode = error?.response?.status
+
+      if (responseCode == 403) {
+        logout()
+      }
+
+      throw error
+    })
+
     setReady(true)
   }, [login])
 
