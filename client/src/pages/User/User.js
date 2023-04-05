@@ -37,7 +37,7 @@ const User = () => {
     <Layout>
       <UserCard user={userQuery.data.user} />
       
-      {permissions.users.edit(userQuery.data.user) && <div className='mt-3 d-flex gap-3'>
+      {permissions.users.update(userQuery.data.user) && <div className='mt-3 d-flex gap-3'>
         <button 
           className='btn btn-outline-success' 
           type='button'

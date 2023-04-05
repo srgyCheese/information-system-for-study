@@ -11,6 +11,7 @@ const EditUser = () => {
   const { userId } = useParams()
   const navigate = useNavigate()
   const userQuery = useUser(userId)
+  
 
   useTitle(`Изменить ${userQuery?.data?.user && userQuery?.data?.user?.name}`)
   
@@ -35,7 +36,7 @@ const EditUser = () => {
     }
 
     updateUser.mutate(editedUser, {
-      onSuccess: () => navigate(`/users/${userId}`)
+      onSuccess: () => navigate(-1)
     })
   }
 
@@ -58,7 +59,7 @@ const EditUser = () => {
           <button
             className='btn btn-outline-danger'
             type='button'
-            onClick={() => navigate(`/users/${userId}`)}
+            onClick={() => navigate(-1)}
           >
             Отмена
           </button>

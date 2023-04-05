@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router'
 import Layout from '../../components/Layout'
 import Spinner from '../../components/Spinner'
 import { AuthContext } from '../../contexts/AuthContext'
@@ -6,6 +7,7 @@ import { useTitle } from '../../hooks/useTitle'
 
 const Profile = () => {
   useTitle('Профиль')
+  const navigate = useNavigate()
 
   const { user } = useContext(AuthContext)
 
@@ -63,6 +65,13 @@ const Profile = () => {
               <p className="text-muted mb-0">{user.Role.title}</p>
             </div>
           </div>
+          <button 
+            className='btn btn-outline-success mt-2' 
+            type='button'
+            onClick={() => navigate(`/users/${user.id}/edit`)}
+          >
+            Изменить
+          </button>
         </div>
       </div>
     </Layout>
