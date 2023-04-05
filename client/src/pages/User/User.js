@@ -37,7 +37,7 @@ const User = () => {
     <Layout>
       <UserCard user={userQuery.data.user} />
       
-      {permissions.canChangeUser(userQuery.data.user) && <div className='mt-3 d-flex gap-3'>
+      {permissions.users.edit(userQuery.data.user) && <div className='mt-3 d-flex gap-3'>
         <button 
           className='btn btn-outline-success' 
           type='button'
@@ -45,7 +45,7 @@ const User = () => {
         >
           Изменить
         </button>
-        {permissions.canDeleteUser(userQuery.data.user) && (
+        {permissions.users.delete(userQuery.data.user) && (
           <button 
             className='btn btn-outline-danger' 
             type='button'

@@ -19,7 +19,7 @@ const ProductShortCard = ({product, startEdit}) => {
           <div className='border-rounded fw-bold fs-5'>
             {product.price} ₽
           </div>
-          {permissions.canChangeProducts() && (
+          {permissions.products.update() && (
             <button 
               className='btn btn-outline-success mt-2' 
               type='button'

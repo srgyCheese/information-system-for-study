@@ -46,7 +46,7 @@ const Categories = () => {
           >
             Добавить Продукт
           </button> 
-        : permissions.canAddCategory() && (
+        : permissions.categories.create() && (
           <button 
             type="button" 
             className="btn btn-outline-success"

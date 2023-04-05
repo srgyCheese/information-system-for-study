@@ -15,7 +15,7 @@ const Products = () => {
 
   return (
     <Layout>
-      {permissions.canAddProduct() && (
+      {permissions.products.create() && (
         <div>
           <button 
             className='btn btn-outline-success mb-3' 

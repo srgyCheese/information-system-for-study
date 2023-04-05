@@ -16,7 +16,7 @@ const Warehouses = () => {
 
   return (
     <Layout>
-      {permissions.canAddWarehouse() && (
+      {permissions.warehouses.create() && (
         <div>
           <button 
             className='btn btn-outline-success' 

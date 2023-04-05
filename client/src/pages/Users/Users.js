@@ -14,7 +14,7 @@ const Users = () => {
 
   return (
     <Layout>
-      {permissions.canAddUser() && (
+      {permissions.users.create() && (
         <div>
           <button 
             className='btn btn-outline-success' 

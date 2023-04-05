@@ -12,38 +12,6 @@ export const usePermissions = () => {
 
     return false
   }
-
-  const canChangeUser = otherUser => {
-    if (user.Role.name == roles.ADMIN) {
-      return true
-    }
-
-    if (user.id == otherUser.id) {
-      return true
-    }
-
-    if (user.Role.name == roles.MANAGER && otherUser.Role.name == roles.COUNSEL) {
-      return true
-    }
-
-    return false
-  }
-
-  const canDeleteUser = otherUser => {
-    if (user.id == otherUser.id) {
-      return false
-    }
-
-    if (user.Role.name == roles.ADMIN) {
-      return true
-    }
-
-    if (user.Role.name == roles.MANAGER && otherUser.Role.name == roles.COUNSEL) {
-      return true
-    }
-
-    return false
-  }
   
   const canChangeRoleTo = otherUser => {
     if (user.id == otherUser.id) {
@@ -51,14 +19,6 @@ export const usePermissions = () => {
     }
 
     if (user.Role.name == roles.ADMIN) {
-      return true
-    }
-
-    return false
-  }
-
-  const canChangeProducts = () => {
-    if (user.Role.name == roles.ADMIN || user.Role.name == roles.MANAGER) {
       return true
     }
 
@@ -82,25 +42,51 @@ export const usePermissions = () => {
     return null
   }
 
-  const canAddUser = _adminOrManager
-
-  const canAddWarehouse = _adminOrManager
-
-  const canChangeCategory = _adminOrManager
-  const canAddCategory = _adminOrManager
-
-  const canAddProduct = _adminOrManager
-
   return {
-    canChangeUser, 
-    canChangeRoleTo, 
-    canDeleteUser,
+    users: {
+      create: _adminOrManager,
+      update: otherUser => {
+        if (user.Role.name == roles.ADMIN) {
+          return true
+        }
+    
+        if (user.id == otherUser.id) {
+          return true
+        }
+    
+        if (user.Role.name == roles.MANAGER && otherUser.Role.name == roles.COUNSEL) {
+          return true
+        }
+    
+        return false
+      },
+      delete: otherUser => {
+        if (user.id == otherUser.id) {
+          return false
+        }
+    
+        if (user.Role.name == roles.ADMIN) {
+          return true
+        }
+    
+        if (user.Role.name == roles.MANAGER && otherUser.Role.name == roles.COUNSEL) {
+          return true
+        }
+    
+        return false
+      },
+    },
+    products: {
+      create: _adminOrManager,
+      update: _adminOrManager,
+    },
+    categories: {
+      create: _adminOrManager,
+      update: _adminOrManager,
+    },
+    warehouses: {
+      create: _adminOrManager,
+    },
     lowerRoles,
-    canChangeProducts,
-    canAddUser,
-    canAddWarehouse,
-    canAddCategory,
-    canChangeCategory,
-    canAddProduct
   }
 }
