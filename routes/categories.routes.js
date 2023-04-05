@@ -196,4 +196,56 @@ router.post('/create', authMiddleware, async (req, res, next) => {
   }
 })
 
+router.put('/:categoryId', async (req, res, next) => {
+  try {
+    const {categoryId} = req.params
+
+    const newCategoryParams = {}
+
+    if (req.body.title) {
+      newCategoryParams.title = req.body.title
+    }
+
+    if (req.body.photo) {
+      newCategoryParams.photo = req.body.photo
+    }
+
+    if (req.body.parent_category_id !== undefined) {
+      newCategoryParams.parent_category_id = req.body.parent_category_id
+    }
+
+    if (!Object.keys(newCategoryParams).length) {
+      return res.status(403).send({
+        message: 'Не введены поля'
+      })
+    }
+
+    if (req.body.parent_category_id !== undefined) {
+      const newParentCategory = await Category.findOne({
+        where: {
+          id: req.body.parent_category_id
+        }
+      })
+
+      if (!newParentCategory) {
+        req.body.parent_category_id = null
+      }else if (newParentCategory.isProductCategory || newParentCategory.id == categoryId) {
+        return res.status(403).send({
+          message: 'Не правильный id родительской категории'
+        })
+      }
+    }
+
+    await Category.update(newCategoryParams, {
+      where: {
+        id: categoryId
+      },
+    })
+
+    return res.send({message: 'Категория изменена'})
+  } catch (e) {
+    next(e)
+  }
+})
+
 module.exports = router

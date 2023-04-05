@@ -1,24 +1,11 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router'
-import api from '../../../services/api'
 import { useCategories } from '../../../queries/categoryQueries'
 import DeleteButton from '../../../components/DeleteButton'
+import EditButton from '../../../components/EditButton'
 
 const CategoryCard = ({ category }) => {
   const navigate = useNavigate()
-  const { refetch } = useCategories()
-
-  const [loading, setLoading] = useState(false)
-
-  const deleteCategory = async () => {
-    setLoading(true)
-    try {
-      await api.delete(`/categories/${category.id}`)
-      await refetch()
-    } catch (e) { }
-
-    setLoading(false)
-  }
 
   return (
     <div
@@ -41,13 +28,9 @@ const CategoryCard = ({ category }) => {
               {category.title}
             </h5>
 
-            
-            {!category.hasChild && (
-              <DeleteButton 
-                onClick={deleteCategory}
-                isLoading={loading}
-              />
-            )}
+            <EditButton 
+              onClick={() => navigate(`/categories/${category.id}/edit`)}
+            />
           </div>
         </div>
       </div>

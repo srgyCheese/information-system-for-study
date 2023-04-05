@@ -8,6 +8,7 @@ import Users from "./pages/Users/Users"
 import User from "./pages/User/User"
 import EditUser from "./pages/EditUser/EditUser"
 import Warehouse from "./pages/Warehouse/Warehouse"
+import EditCategory from "./pages/EditCategory/EditCategory"
 
 const routes = [
   {
@@ -26,6 +27,10 @@ const routes = [
   {
     path: '/categories/:id',
     component: <Categories />
+  },
+  {
+    path: '/categories/:categoryId/edit',
+    component: <EditCategory />
   },
   {
     path: '/products',

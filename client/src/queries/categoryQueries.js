@@ -17,6 +17,25 @@ const useCategories = (id) => {
   })
 }
 
+const useUpdateCategory = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation(async category => {
+
+    if (category.photo) {
+      const photoUrlRes = await api.addPhoto(category.photo)
+  
+      category.photo = photoUrlRes.data.url
+    }
+
+    return api.put(`/categories/${category.id}`, category)
+  }, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('categories')
+    },
+  })
+}
+
 const useCategoryAttributes = (id) => {
   const path = ['categoryAttributes']
 
@@ -45,4 +64,4 @@ const useAddCategory = () => {
 
 const useCategoryValueTypes = () => useQuery('category-value-types', () => api.getData(`/categories/value-types`))
 
-export { useCategories, useCategoryValueTypes, useCategoryAttributes, useAddCategory }
+export { useCategories, useCategoryValueTypes, useCategoryAttributes, useAddCategory, useUpdateCategory }
