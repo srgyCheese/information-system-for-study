@@ -5,6 +5,8 @@ Back-end: express, jsonwebtoken, sequelize
 
 ## Deploying
 
+copy env.example to .env
+
 ```sh
 npm i
 npm run client:install

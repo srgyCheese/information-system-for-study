@@ -1,16 +1,19 @@
-import React, { useState } from 'react'
-import { usePermissions } from '../../../hooks/usePermissions'
+import React, { useRef, useState } from 'react'
 import { useUpdateProduct } from '../../../queries/productsQueries'
 import './ProductShortCard.scss'
 
 const EditProductShortCard = ({ product, cancelEdit }) => {
   const [editedProduct, setEditedProduct] = useState(product)
+  const photoRef = useRef()
   const updateProduct = useUpdateProduct()
 
   const handleSubmit = e => {
     e.preventDefault()
 
-    updateProduct.mutate(editedProduct, {
+    updateProduct.mutate({
+      ...editedProduct,
+      photos: photoRef.current?.files?.[0] ? photoRef.current.files : null
+    }, {
       onSuccess: cancelEdit
     })
   }
@@ -20,10 +23,11 @@ const EditProductShortCard = ({ product, cancelEdit }) => {
       <div className="card-body">
         <form onSubmit={handleSubmit} className='d-flex'>
           <div className='short-product-card__image'>
-            <img src={product.ProductPhotos[0].url} />
+            <img src={product.ProductPhotos[0]?.url} />
+            <input type='file' className='form-control mt-2' ref={photoRef} />
           </div>
           <div className='ps-4 w-100'>
-            <input 
+            <input  
               className='form-control fs-3'
               value={editedProduct.title}
               onChange={e => setEditedProduct({...editedProduct, title: e.target.value})}

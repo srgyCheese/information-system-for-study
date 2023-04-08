@@ -9,7 +9,7 @@ const ProductShortCard = ({product, startEdit}) => {
     <div className="card short-product-card">
       <div className="card-body d-flex">
         <div className='short-product-card__image'>
-          <img src={product.ProductPhotos[0].url} />
+          <img src={product.ProductPhotos[0]?.url} />
         </div>
         <div className='ps-4 w-100'>
           <h3>{product.title}</h3>

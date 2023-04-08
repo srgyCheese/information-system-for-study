@@ -35,10 +35,17 @@ const useUpdateProduct = () => {
   const queryClient = useQueryClient()
 
   return useMutation(async product => {
+    if (product.photos?.[0] instanceof File) {
+      const photoUrlRes = await api.addPhoto(product.photos[0])
+  
+      product.photos = [photoUrlRes.data.url]
+    }
+
     return api.put(`/products/${product.id}`, {
       price: product.price,
       description: product.description,
       title: product.title,
+      photos: product.photos
     })
   }, {
     onSuccess: ({data}) => {

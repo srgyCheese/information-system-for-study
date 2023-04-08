@@ -150,14 +150,9 @@ router.put('/:productId', async (req, res, next) => {
   try {
     const {productId} = req.params
 
-    const newProductParams = {}
-
-    if (req.body.title) {
-      newProductParams.title = req.body.title
-    }
-
-    if (req.body.description) {
-      newProductParams.description = req.body.description
+    const newProductParams = {
+      ...(req.body.title && {title: req.body.title}),
+      ...(req.body.description && {description: req.body.description}),
     }
 
     if (req.body.price) {
@@ -167,7 +162,20 @@ router.put('/:productId', async (req, res, next) => {
       })
     }
 
-    if (!Object.keys(newProductParams).length && !req.body.price) {
+    if (req.body.photos?.length) {
+      await ProductPhoto.destroy({
+        where: {
+          ProductId: productId
+        }
+      })
+
+      await ProductPhoto.bulkCreate(req.body.photos.map(el => ({
+        url: el,
+        ProductId: productId
+      })))
+    }
+
+    if (!Object.keys(newProductParams).length && !req.body.price && !req.body.photos) {
       return res.status(403).send({
         message: 'Не введены поля'
       })
