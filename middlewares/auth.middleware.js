@@ -26,7 +26,7 @@ const authMiddleware = (allowedRoles) => async (req, res, next) => {
       return
     }
 
-    if (allowedRoles && !['admin', ...allowedRoles].includes(req.body.user.Role.name)) {
+    if (allowedRoles && !['admin', ...allowedRoles].includes(req.user.Role.name)) {
       return res.status(403).send({
         message: 'Недостаточно прав'
       })

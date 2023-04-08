@@ -43,7 +43,7 @@ router.post('/create',
         })
       }
 
-      if (!getLowerRoles(user.Role.name).includes(req.body.role)) {
+      if (!getLowerRoles(req.user.Role.name).includes(req.body.role)) {
         return res.status(403).send({
           message: 'Недостаточно прав',
         })
@@ -126,13 +126,14 @@ router.get('/:userId', authMiddleware(), async (req, res, next) => {
 
 router.put('/:userId', authMiddleware(['manager']), async (req, res, next) => {
   try {
-    const editingUserRole = Role.findOne({
+    const editingUser = await User.findOne({
       where: {
-        UserId: req.params.userId
-      }
+        id: req.params.userId
+      }, 
+      include: [Role]
     })
 
-    if (!getLowerRoles(user.Role.name).includes(editingUserRole.name)) {
+    if (!getLowerRoles(req.user.Role.name).includes(editingUser.Role.name)) {
       return res.status(403).send({
         message: 'Недостаточно прав',
       })
@@ -191,13 +192,14 @@ router.delete('/:userId', authMiddleware(['manager']), async (req, res, next) =>
       })
     }
 
-    const deletingUserRole = Role.findOne({
+    const deletingUser = await User.findOne({
       where: {
-        UserId: req.params.userId
-      }
+        id: req.params.userId
+      }, 
+      include: [Role]
     })
 
-    if (!getLowerRoles(user.Role.name).includes(deletingUserRole.name)) {
+    if (!getLowerRoles(req.user.Role.name).includes(deletingUser.Role.name)) {
       return res.status(403).send({
         message: 'Недостаточно прав',
       })
