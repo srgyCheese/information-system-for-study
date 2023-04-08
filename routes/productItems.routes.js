@@ -2,6 +2,7 @@ const { Router } = require('express')
 const { check, validationResult } = require('express-validator')
 const sequelize = require('../models/sequelize')
 const Sequelize = require('sequelize')
+const authMiddleware = require('../middlewares/auth.middleware')
 
 const {
   Product,
@@ -12,7 +13,7 @@ const {
 
 const router = Router()
 
-router.post('/create', [
+router.post('/create', authMiddleware(['manager']), [
   check('productId').notEmpty(),
   check('quantity').notEmpty(),
   check('warehouseId').notEmpty(),

@@ -1,5 +1,4 @@
 const { Router } = require('express')
-const authMiddleware = require('../middlewares/auth.middleware')
 const router = Router()
 const sequelize = require('../models/sequelize')
 
@@ -9,7 +8,7 @@ const {
   District
 } = sequelize.models
 
-router.get('/all', authMiddleware, async (req, res, next) => {
+router.get('/all', async (req, res, next) => {
   try {
     return res.send({
       districts: await District.findAll(),

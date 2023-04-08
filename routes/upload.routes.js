@@ -2,7 +2,7 @@ const { Router } = require('express')
 const authMiddleware = require('../middlewares/auth.middleware')
 const router = Router()
 
-router.post('/', authMiddleware, (req, res, next) => {
+router.post('/', authMiddleware(), (req, res, next) => {
     if (!req.files || Object.keys(req.files).length === 0) {
         return res.status(400).send({
             message: 'Не прикреплены файлы'

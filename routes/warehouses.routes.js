@@ -9,7 +9,7 @@ const {
   Warehouse
 } = sequelize.models
 
-router.get('/', authMiddleware, async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
     return res.send({
       warehouses: await Warehouse.findAll({
@@ -21,7 +21,7 @@ router.get('/', authMiddleware, async (req, res, next) => {
   }
 })
 
-router.get('/:warehouseId', authMiddleware, async (req, res, next) => {
+router.get('/:warehouseId', async (req, res, next) => {
   try {
     return res.send({
       warehouse: await Warehouse.findOne({
@@ -36,7 +36,7 @@ router.get('/:warehouseId', authMiddleware, async (req, res, next) => {
   }
 })
 
-router.post('/create', authMiddleware, 
+router.post('/create', authMiddleware(['manager']), 
   [
     check('title').notEmpty(),
     check('address').notEmpty(),

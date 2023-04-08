@@ -5,6 +5,7 @@ const { check, validationResult } = require('express-validator')
 const authMiddleware = require('../middlewares/auth.middleware')
 const sequelize = require('../models/sequelize')
 const Sequelize = require('sequelize')
+const { getLowerRoles } = require('../helpers/lowerRoles')
 
 const {
   User,
@@ -13,7 +14,7 @@ const {
 
 const router = Router()
 
-router.get('/current-user', authMiddleware, async (req, res) => {
+router.get('/current-user', authMiddleware(), async (req, res) => {
   try {
     return res.send({user: req.user.makeJSON()})
   } catch (e) {
@@ -22,7 +23,7 @@ router.get('/current-user', authMiddleware, async (req, res) => {
 })
 
 router.post('/create', 
-  authMiddleware,
+  authMiddleware(['manager']),
   [
     check('email').notEmpty().isEmail(),
     check('photo').notEmpty(),
@@ -39,6 +40,12 @@ router.post('/create',
         return res.status(400).json({
           errors: errors.array(),
           message: 'Некорректный данные'
+        })
+      }
+
+      if (!getLowerRoles(user.Role.name).includes(req.body.role)) {
+        return res.status(403).send({
+          message: 'Недостаточно прав',
         })
       }
 
@@ -82,7 +89,7 @@ router.post('/create',
   }
 )
 
-router.get('/', authMiddleware, async (req, res, next) => {
+router.get('/', authMiddleware(), async (req, res, next) => {
   try {
     const users = await User.findAll({
       include: [
@@ -96,7 +103,7 @@ router.get('/', authMiddleware, async (req, res, next) => {
   }
 })
 
-router.get('/:userId', authMiddleware, async (req, res, next) => {
+router.get('/:userId', authMiddleware(), async (req, res, next) => {
   try {
     const user = await User.findOne({
       where: {
@@ -117,8 +124,20 @@ router.get('/:userId', authMiddleware, async (req, res, next) => {
   }
 })
 
-router.put('/:userId', authMiddleware, async (req, res, next) => {
+router.put('/:userId', authMiddleware(['manager']), async (req, res, next) => {
   try {
+    const editingUserRole = Role.findOne({
+      where: {
+        UserId: req.params.userId
+      }
+    })
+
+    if (!getLowerRoles(user.Role.name).includes(editingUserRole.name)) {
+      return res.status(403).send({
+        message: 'Недостаточно прав',
+      })
+    }
+
     const newUserParams = {}
 
     if (req.body.name) {
@@ -164,8 +183,26 @@ router.put('/:userId', authMiddleware, async (req, res, next) => {
   }
 })
 
-router.delete('/:userId', authMiddleware, async (req, res, next) => {
+router.delete('/:userId', authMiddleware(['manager']), async (req, res, next) => {
   try {
+    if (user.id === req.params.userId) {
+      return res.status(403).send({
+        message: 'Нельзя удалить себя',
+      })
+    }
+
+    const deletingUserRole = Role.findOne({
+      where: {
+        UserId: req.params.userId
+      }
+    })
+
+    if (!getLowerRoles(user.Role.name).includes(deletingUserRole.name)) {
+      return res.status(403).send({
+        message: 'Недостаточно прав',
+      })
+    }
+
     await User.destroy({
       where: {
         id: req.params.userId

@@ -32,7 +32,7 @@ export const useAuth = () => {
     api.interceptors.response.use((response) => response, (error) => {
       const responseCode = error?.response?.status
 
-      if (responseCode == 403) {
+      if (responseCode == 401) {
         logout()
       }
 

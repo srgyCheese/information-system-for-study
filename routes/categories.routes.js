@@ -77,7 +77,7 @@ router.get('/:categoryId', async (req, res, next) => {
   }
 })
 
-router.delete('/:categoryId', async (req, res, next) => {
+router.delete('/:categoryId', authMiddleware(['manager']), async (req, res, next) => {
   try {
     const category = await Category.findOne({
       where: {
@@ -101,7 +101,7 @@ router.delete('/:categoryId', async (req, res, next) => {
   }
 })
 
-router.post('/create', authMiddleware, async (req, res, next) => {
+router.post('/create', authMiddleware(['manager']), async (req, res, next) => {
   try {
     if (!req.body.title) {
       return res.status(400).json({
@@ -196,7 +196,7 @@ router.post('/create', authMiddleware, async (req, res, next) => {
   }
 })
 
-router.put('/:categoryId', async (req, res, next) => {
+router.put('/:categoryId', authMiddleware(['manager']), async (req, res, next) => {
   try {
     const {categoryId} = req.params
 

@@ -2,6 +2,7 @@ const { Router } = require('express')
 const { check, validationResult } = require('express-validator')
 const sequelize = require('../models/sequelize')
 const Sequelize = require('sequelize')
+const authMiddleware = require('../middlewares/auth.middleware')
 
 const {
   Product,
@@ -16,7 +17,7 @@ const {
 
 const router = Router()
 
-router.post('/create', [
+router.post('/create', authMiddleware(['manager']), [
   check('price').notEmpty(),
   check('title').notEmpty(),
   check('photos').notEmpty().isArray(),
@@ -118,7 +119,7 @@ router.get('/:id', async (req, res, next) => {
   }
 })
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', authMiddleware(['manager']), async (req, res, next) => {
   try {
     await ProductValue.destroy({
       where: {
@@ -146,7 +147,7 @@ router.delete('/:id', async (req, res, next) => {
   }
 })
 
-router.put('/:productId', async (req, res, next) => {
+router.put('/:productId', authMiddleware(['manager']), async (req, res, next) => {
   try {
     const {productId} = req.params
 

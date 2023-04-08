@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router'
 import { useCategories } from '../../../queries/categoryQueries'
 import DeleteButton from '../../../components/DeleteButton'
 import EditButton from '../../../components/EditButton'
+import { usePermissions } from '../../../hooks/usePermissions'
 
 const CategoryCard = ({ category }) => {
   const navigate = useNavigate()
+  const permissions = usePermissions()
 
   return (
     <div
@@ -28,9 +30,11 @@ const CategoryCard = ({ category }) => {
               {category.title}
             </h5>
 
-            <EditButton 
-              onClick={() => navigate(`/categories/${category.id}/edit`)}
-            />
+            {permissions.categories.update() && (
+              <EditButton 
+                onClick={() => navigate(`/categories/${category.id}/edit`)}
+              />
+            )}
           </div>
         </div>
       </div>
