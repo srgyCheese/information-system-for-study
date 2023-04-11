@@ -12,11 +12,10 @@ const EditUser = () => {
   const navigate = useNavigate()
   const userQuery = useUser(userId)
   
-
   useTitle(`Изменить ${userQuery?.data?.user && userQuery?.data?.user?.name}`)
   
   const updateUser = useUpdateUser()
-  const [editedUser, setEditedUser] = useState()
+  const [editedUser, setEditedUser] = useState({})
 
   if (userQuery.isLoading) {
     return (
@@ -29,13 +28,17 @@ const EditUser = () => {
   const submitHandler = e => {
     e.preventDefault()
 
-    if (!editedUser?.phone || !editedUser?.name || !editedUser?.email) {
+    if (!Object.values(editedUser)?.length) {
+      return navigate(-1)
+    }
+
+    if (Object.values(editedUser).some(value => !value)) {
       return toast('Не введены поля', {
         type: 'error'
       })
     }
 
-    updateUser.mutate(editedUser, {
+    updateUser.mutate({id: userQuery.data.user.id, ...editedUser}, {
       onSuccess: () => navigate(-1)
     })
   }
@@ -44,7 +47,7 @@ const EditUser = () => {
     <Layout>
       <form onSubmit={submitHandler}>
         <div className='mb-3'>
-          <EditUserCard user={editedUser || userQuery.data.user} setUser={setEditedUser} />
+          <EditUserCard user={userQuery.data.user} editedUser={editedUser} setEditedUser={setEditedUser} />
         </div>
 
         <div className='d-flex gap-3'>

@@ -141,6 +141,10 @@ router.put('/:userId', authMiddleware(['manager']), async (req, res, next) => {
 
     const newUserParams = {}
 
+    if (req.body.photo) {
+      newUserParams.photo = req.body.photo
+    }
+
     if (req.body.name) {
       newUserParams.name = req.body.name
     }

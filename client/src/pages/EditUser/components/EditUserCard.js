@@ -1,6 +1,16 @@
 import React from 'react'
 
-const EditUserCard = ({ user, setUser }) => {
+const EditUserCard = ({ user, setEditedUser, editedUser }) => {
+  const editInputTextProps = (valueName) => {
+    return {
+      value: editedUser[valueName] == undefined ? user[valueName] : editedUser[valueName],
+      onChange: e => setEditedUser({
+        ...editedUser,
+        [valueName]: e.target.value
+      })
+    }
+  }
+
   return (
     <div className='d-flex container-fluid gap-3' style={{ padding: 0 }}>
       <div>
@@ -9,6 +19,7 @@ const EditUserCard = ({ user, setUser }) => {
           className='object-fit-contain'
           style={{ height: '300px', width: '300px' }}
         />
+        <input type='file' className="form-control mt-2" onChange={e => setEditedUser({...editedUser, photo: e.target.files?.[0]})} />
       </div>
       <div className='w-100'>
         <div className="row">
@@ -19,11 +30,7 @@ const EditUserCard = ({ user, setUser }) => {
             <p className="text-muted mb-0">
               <input 
                 className='form-control'
-                value={user.name}
-                onChange={e => setUser({
-                  ...user,
-                  name: e.target.value
-                })}
+                {...editInputTextProps('name')}
               />
             </p>
           </div>
@@ -37,11 +44,7 @@ const EditUserCard = ({ user, setUser }) => {
             <p className="text-muted mb-0">
               <input 
                 className='form-control'
-                value={user.email}
-                onChange={e => setUser({
-                  ...user,
-                  email: e.target.value
-                })}
+                {...editInputTextProps('email')}
               />
             </p>
           </div>
@@ -55,11 +58,7 @@ const EditUserCard = ({ user, setUser }) => {
             <p className="text-muted mb-0">
               <input 
                 className='form-control'
-                value={user.phone}
-                onChange={e => setUser({
-                  ...user,
-                  phone: e.target.value
-                })}
+                {...editInputTextProps('phone')}
               />
             </p>
           </div>
@@ -82,11 +81,7 @@ const EditUserCard = ({ user, setUser }) => {
             <p className="text-muted mb-0">
               <input 
                 className='form-control'
-                value={user.password}
-                onChange={e => setUser({
-                  ...user,
-                  password: e.target.value
-                })}
+                {...editInputTextProps('password')}
               />
             </p>
           </div>
