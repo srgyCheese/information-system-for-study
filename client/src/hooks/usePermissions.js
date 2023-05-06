@@ -86,6 +86,13 @@ export const usePermissions = () => {
     },
     warehouses: {
       create: _adminOrManager,
+      update: _adminOrManager,
+      delete: _adminOrManager,
+    },
+    productItems: {
+      create: _adminOrManager,
+      update: _adminOrManager,
+      delete: _adminOrManager,
     },
     lowerRoles,
     canChangeRoleTo

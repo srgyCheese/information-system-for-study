@@ -48,7 +48,7 @@ const useUpdateUser = () => {
   }, {
     onSuccess: ({data}) => {
       queryClient.setQueryData(['users', data.user?.id], data)
-      // queryClient.invalidateQueries('users')
+      queryClient.invalidateQueries('users')
     },
   })
 }
