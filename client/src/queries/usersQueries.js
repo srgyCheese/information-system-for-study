@@ -26,9 +26,10 @@ const useUsers = () => {
 }
 
 const useUser = (id, params) => {
-  const path = ['users', id]
+  const path = ['users', +id]
 
   return useQuery(path, () => {
+    
     return api.getData(`/users/${id}`)
   }, params)
 }
@@ -45,8 +46,8 @@ const useUpdateUser = () => {
 
     return api.put(`/users/${user.id}`, user)
   }, {
-    onSuccess: data => {
-      queryClient.setQueryData(['users', data.user?.id], data?.data?.user)
+    onSuccess: ({data}) => {
+      queryClient.setQueryData(['users', data.user?.id], data)
       // queryClient.invalidateQueries('users')
     },
   })
