@@ -23,7 +23,7 @@ const Login = () => {
       })
     }
 
-    if (password.length < 5) {
+    if (password.length < 6) {
       return toast('Длина пароля должна быть не менее 6 символов', {
         type: 'error'
       })

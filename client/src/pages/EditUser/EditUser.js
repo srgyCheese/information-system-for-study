@@ -38,6 +38,12 @@ const EditUser = () => {
       })
     }
 
+    if (editedUser.hasOwnProperty('password') && editedUser.password?.length < 6) {
+      return toast('Длина пароля должна быть не менее 6 символов', {
+        type: 'error'
+      })
+    }
+
     updateUser.mutate({id: userQuery.data.user.id, ...editedUser}, {
       onSuccess: () => navigate(-1)
     })

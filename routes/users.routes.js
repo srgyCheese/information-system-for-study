@@ -25,7 +25,7 @@ router.get('/current-user', authMiddleware(), async (req, res) => {
 router.post('/create', 
   authMiddleware(['manager']),
   [
-    check('email').notEmpty().isEmail(),
+    check('email').notEmpty(),
     check('photo').notEmpty(),
     check('role').notEmpty(),
     check('name').notEmpty(),
@@ -164,6 +164,12 @@ router.put('/:userId', authMiddleware(['manager']), async (req, res, next) => {
     if (!Object.keys(newUserParams).length) {
       return res.status(403).send({
         message: 'Не введены поля'
+      })
+    }
+
+    if (newUserParams.password && newUserParams.password?.length < 6) {
+      return res.status(403).send({
+        message: 'Длина пароля должна быть не менее 6 символов'
       })
     }
 
