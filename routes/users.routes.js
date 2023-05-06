@@ -25,7 +25,7 @@ router.get('/current-user', authMiddleware(), async (req, res) => {
 router.post('/create', 
   authMiddleware(['manager']),
   [
-    check('email').notEmpty(),
+    check('email').notEmpty().isEmail(),
     check('photo').notEmpty(),
     check('role').notEmpty(),
     check('name').notEmpty(),
@@ -196,7 +196,7 @@ router.put('/:userId', authMiddleware(['manager']), async (req, res, next) => {
 
 router.delete('/:userId', authMiddleware(['manager']), async (req, res, next) => {
   try {
-    if (user.id === req.params.userId) {
+    if (req.user.id === req.params.userId) {
       return res.status(403).send({
         message: 'Нельзя удалить себя',
       })

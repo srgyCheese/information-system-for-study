@@ -6,6 +6,7 @@ import Spinner from '../../components/Spinner'
 import EditUserCard from './components/EditUserCard'
 import { toast } from 'react-toastify'
 import { useTitle } from '../../hooks/useTitle'
+import { isEmail } from '../../services/isEmail'
 
 const EditUser = () => {
   const { userId } = useParams()
@@ -40,6 +41,12 @@ const EditUser = () => {
 
     if (editedUser.hasOwnProperty('password') && editedUser.password?.length < 6) {
       return toast('Длина пароля должна быть не менее 6 символов', {
+        type: 'error'
+      })
+    }
+
+    if (editedUser.hasOwnProperty('email') && !isEmail(editedUser.email)) {
+      return toast('Неправильный формат email', {
         type: 'error'
       })
     }

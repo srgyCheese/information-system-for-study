@@ -19,7 +19,12 @@ const EditUserCard = ({ user, setEditedUser, editedUser }) => {
           className='object-fit-contain'
           style={{ height: '300px', width: '300px' }}
         />
-        <input type='file' className="form-control mt-2" onChange={e => setEditedUser({...editedUser, photo: e.target.files?.[0]})} />
+        <input 
+          type='file' 
+          className="form-control mt-2" 
+          onChange={e => setEditedUser({...editedUser, photo: e.target.files?.[0]})} 
+          accept=".jpg, .jpeg, .png"
+        />
       </div>
       <div className='w-100'>
         <div className="row">

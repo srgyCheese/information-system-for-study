@@ -5,6 +5,7 @@ import { toast } from 'react-toastify'
 import { useAddUser } from '../../../queries/usersQueries'
 import { usePermissions } from '../../../hooks/usePermissions'
 import { rolesList } from '../../../services/roles'
+import { isEmail } from '../../../services/isEmail'
 
 const AddUserPopup = () => {
   const { closePopup } = useContext(PopupContext)
@@ -47,7 +48,7 @@ const AddUserPopup = () => {
       })
     }
 
-    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+    if (!isEmail(email)) {
       return toast('Неправильный формат e-mail', {
         type: 'error'
       })
