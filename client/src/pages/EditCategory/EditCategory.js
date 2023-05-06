@@ -58,11 +58,12 @@ const EditCategory = () => {
         <div className='mb-3'>
           <div className="card">
             <div className="card-body d-flex">
-              <div style={{maxWidth: '400px', maxHeight: '400px'}}>
+              <div>
                 <img 
                   src={category.photo} 
                   style={{
-                    width: '100%',
+                    width: '400px',
+                    height: '400px',
                     objectFit: 'contain'
                   }} 
                 />
