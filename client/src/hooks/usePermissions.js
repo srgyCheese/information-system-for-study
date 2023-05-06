@@ -88,5 +88,6 @@ export const usePermissions = () => {
       create: _adminOrManager,
     },
     lowerRoles,
+    canChangeRoleTo
   }
 }

@@ -160,6 +160,18 @@ router.put('/:userId', authMiddleware(['manager']), async (req, res, next) => {
     if (req.body.password) {
       newUserParams.password = await bcrypt.hash(req.body.password, 8)
     }
+    
+    if (req.body.Role?.name) {
+      const userRole = await Role.findOne({where: {name: req.body.Role?.name}})
+      
+      newUserParams.RoleId = userRole.id
+    }
+    
+    if (req.body.Role?.name && !getLowerRoles(req.user.Role.name).includes(req.body.Role?.name)) {
+      return res.status(403).send({
+        message: 'Недостаточно прав для изменения роли',
+      })
+    }
 
     if (!Object.keys(newUserParams).length) {
       return res.status(403).send({

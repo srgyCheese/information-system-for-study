@@ -1,6 +1,10 @@
 import React from 'react'
+import { usePermissions } from '../../../hooks/usePermissions'
+import { rolesList } from '../../../services/roles'
 
 const EditUserCard = ({ user, setEditedUser, editedUser }) => {
+  const permissions = usePermissions()
+
   const editInputTextProps = (valueName) => {
     return {
       value: editedUser[valueName] == undefined ? user[valueName] : editedUser[valueName],
@@ -74,7 +78,24 @@ const EditUserCard = ({ user, setEditedUser, editedUser }) => {
             <p className="mb-0">Роль</p>
           </div>
           <div className="col-sm-9">
-            <p className="text-muted mb-0">{user.Role.title}</p>
+            {permissions.canChangeRoleTo(user) ? (
+              <select 
+                className="form-select"
+                value={editedUser.Role == undefined ? user.Role.name : editedUser.Role.name}
+                onChange={e => setEditedUser({
+                  ...editedUser,
+                  Role: rolesList.find(role => role.name === e.target.value)
+                })}
+              >
+                {rolesList.map(role => (
+                  <option key={role.name} value={role.name} hidden={!permissions.lowerRoles().includes(role.name)}>{role.title}</option>
+                ))}
+              </select>
+            ) : (
+              <p className="text-muted mb-0">
+                {user.Role.title}
+              </p>
+            )}
           </div>
         </div>
         <hr />
