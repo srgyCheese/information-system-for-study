@@ -7,14 +7,32 @@ import ProductsSearchBar from './components/ProductsSearchBar'
 import ProductsList from './components/ProductsList'
 import { useSearchParams } from 'react-router-dom'
 
-const ProductsSearchList = () => {
+const ProductsSearchList = ({category}) => {
   const [searchParams, setSearchParams] = useSearchParams()
-  const searchOptions = useMemo(() => Object.fromEntries(searchParams), [searchParams])
 
-  const productsQuery = useProducts({
-    ...searchOptions
-  })
+  const searchOptions = useMemo(() => {
+    const query = Object.fromEntries(searchParams)
+    query.category = category || query.category
+
+    return query
+  }, [searchParams])
+
+  const productsQuery = useProducts(searchOptions)
   const categoriesQuery = useCategories()
+
+  const searchWithOptions = options => {
+    const actualOptions = {}
+
+    if (options.title) {
+      actualOptions.title = options.title
+    }
+
+    if (options.category && !category) {
+      actualOptions.category = options.category
+    }
+
+    setSearchParams(actualOptions)
+  }
 
   if (categoriesQuery.isLoading) {
     return <Spinner />
@@ -23,17 +41,9 @@ const ProductsSearchList = () => {
   return (
     <div className='products-container'>
       <ProductsSearchBar
-        searchWithOptions={opt => {
-          const _options = {}
-          if (opt.title) {
-            _options.title = opt.title
-          }
-          if (opt.category) {
-            _options.category = opt.category
-          }
-          setSearchParams(_options)
-        }}
-        initOptions={searchOptions}
+        searchWithOptions={searchWithOptions}
+        initOptions={{searchOptions}}
+        constOptions={{category}}
         isLoading={productsQuery.isLoading}
       />
       

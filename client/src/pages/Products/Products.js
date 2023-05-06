@@ -4,7 +4,7 @@ import ProductsSearchList from '../../components/ProductsSearchList/ProductsSear
 import { PopupContext } from '../../contexts/PopupContext'
 import { usePermissions } from '../../hooks/usePermissions'
 import { useTitle } from '../../hooks/useTitle'
-import AddProductPopup from './components/AddProductPopup'
+import AddProductPopup from '../../components/AddProductPopup/AddProductPopup'
 
 const Products = () => {
   useTitle('Товары')
@@ -18,7 +18,7 @@ const Products = () => {
       {permissions.products.create() && (
         <div>
           <button 
-            className='btn btn-outline-success mb-3' 
+            className='btn btn-outline-success' 
             type='button'
             onClick={() => openPopup(<AddProductPopup />)}
           >

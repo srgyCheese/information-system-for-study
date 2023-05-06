@@ -104,7 +104,7 @@ const EditCategory = () => {
           <button
             className='btn btn-outline-danger'
             type='button'
-            onClick={() => navigate(`/categories/${category.parent_category_id ? category.parent_category_id : ''}`)}
+            onClick={() => navigate(-1)}
           >
             Отмена
           </button>

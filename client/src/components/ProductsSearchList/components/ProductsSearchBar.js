@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import { useCategories } from '../../../queries/categoryQueries'
 
-const ProductsSearchBar = ({ searchWithOptions, isLoading, initOptions }) => {
+const ProductsSearchBar = ({ searchWithOptions, isLoading, initOptions, constOptions }) => {
   const [category, setCategory] = useState(initOptions.category)
   const [title, setTitle] = useState(initOptions.title)
 
@@ -32,16 +32,18 @@ const ProductsSearchBar = ({ searchWithOptions, isLoading, initOptions }) => {
           onChange={e => setTitle(e.target.value)}
           style={{width: '200%'}}
         />
-        <select
-          className="form-select"
-          value={category}
-          onChange={e => setCategory(e.target.value)}
-        >
-          <option value={null}> </option>
-          {productCategories.map(cat => (
-            <option key={cat.id} value={cat.id}>{cat.title}</option>
-          ))}
-        </select>
+        {!constOptions.category && (
+          <select
+            className="form-select"
+            value={category}
+            onChange={e => setCategory(e.target.value)}
+          >
+            <option value={null}> </option>
+            {productCategories.map(cat => (
+              <option key={cat.id} value={cat.id}>{cat.title}</option>
+            ))}
+          </select>
+        )}
         <button
           className='btn btn-primary d-flex align-items-center'
           type='submit'
