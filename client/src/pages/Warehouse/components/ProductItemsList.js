@@ -12,17 +12,21 @@ const ProductItemsList = ({warehouseId}) => {
 
   const {productItems} = productItemsQuery.data
 
-  if (!productItems) {
+  if (!productItems?.length) {
     return <h4>Товаров нет</h4>
   }
 
   return (
-    <div>
+    <div className='d-flex flex-column gap-2'>
       {productItems.map(productItem => (
         <div className="card" key={productItem.id}>
           <div className="d-flex">
-            <div style={{ height: '176px', width: '160px' }}>
-              <img src={productItem.Product.ProductPhotos[0].url} className="img-fluid rounded-start h-100 w-100 object-fit-contain" />
+            <div>
+              <img 
+                src={productItem.Product.ProductPhotos[0].url} 
+                className="rounded-start object-fit-contain"
+                style={{ height: '176px', width: '160px' }}
+              />
             </div>
             <div>
               <div className="card-body">

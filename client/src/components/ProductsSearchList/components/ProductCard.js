@@ -12,10 +12,11 @@ const ProductCard = ({product}) => {
   return (
     <div className="card mb-3">
       <div className="d-flex">
-        <div style={{height: '176px', width: '160px'}} onClick={navigateToProduct} className='cursor-pointer'>
-          <img 
+        <div onClick={navigateToProduct} className='cursor-pointer'>
+          <img
+            style={{height: '176px', width: '160px'}}
             src={product.ProductPhotos?.[0]?.url} 
-            className="img-fluid rounded-start h-100 w-100 object-fit-contain"
+            className="rounded-start object-fit-contain"
           />
         </div>
         <div>

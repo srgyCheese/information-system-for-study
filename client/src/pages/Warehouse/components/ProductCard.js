@@ -33,9 +33,13 @@ const ProductCard = ({ product, isLoading, textMessage }) => {
   return (
     <div className="card">
       <div className="d-flex">
-        <div style={{ height: '176px', width: '160px' }}>
-          <img src={product.ProductPhotos[0].url} className="img-fluid rounded-start h-100 w-100 object-fit-contain" />
-        </div>
+        <Link to={`/products/${product.id}`} target='_blank'>
+          <img 
+            src={product.ProductPhotos[0].url} 
+            className="rounded-start object-fit-contain" 
+            style={{ height: '176px', width: '160px' }}
+          />
+        </Link>
         <div>
           <div className="card-body">
             <Link to={`/products/${product.id}`} target='_blank' className='text-dark text-decoration-none'>
