@@ -1,6 +1,6 @@
 import React  from 'react'
-import Spinner from '../../../components/Spinner'
-import { useCategoryAttributes } from '../../../queries/categoryQueries'
+import Spinner from '../Spinner'
+import { useCategoryAttributes } from '../../queries/categoryQueries'
 
 const InputForAttribute = ({attribute, setValue, value}) => {
   const idForLabel = `add-product-value-${attribute.id}`
@@ -23,7 +23,7 @@ const InputForAttribute = ({attribute, setValue, value}) => {
           type='checkbox'
           className='form-check-input'
           id={idForLabel} 
-          value={value} 
+          checked={value} 
           onChange={e => setValue(!value)}
         />
       )
@@ -31,6 +31,7 @@ const InputForAttribute = ({attribute, setValue, value}) => {
       return (
         <select 
           className="form-select"
+          value={value}
           onChange={e => setValue(e.target.value)}
         >
           <option value={null}> </option>
@@ -52,7 +53,7 @@ const InputForAttribute = ({attribute, setValue, value}) => {
   }
 }
 
-const AddProductAttributesForm = ({currentCategory, attributesValues, setAttributesValues}) => {
+const ProductAttributesForm = ({currentCategory, attributesValues, setAttributesValues, tableHead = true}) => {
   const categoryAttributesQuery = useCategoryAttributes(currentCategory)
 
   if (categoryAttributesQuery.isLoading) {
@@ -63,12 +64,14 @@ const AddProductAttributesForm = ({currentCategory, attributesValues, setAttribu
 
   return (
     <table className="table mt-2">
-      <thead>
-        <tr>
-          <th scope="col">Свойство</th>
-          <th scope="col">Значение</th>
-        </tr>
-      </thead>
+      {tableHead && (
+        <thead>
+          <tr>
+            <th scope="col">Свойство</th>
+            <th scope="col">Значение</th>
+          </tr>
+        </thead>
+      )}
       <tbody>
         {categoryAttributesQuery.data.attributes.map(attr => (
           <tr key={attr.id}>
@@ -96,4 +99,4 @@ const AddProductAttributesForm = ({currentCategory, attributesValues, setAttribu
   )
 }
 
-export default AddProductAttributesForm
+export default ProductAttributesForm

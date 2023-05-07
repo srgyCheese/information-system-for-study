@@ -55,6 +55,18 @@ const useUpdateProduct = () => {
   })
 }
 
+const useUpdateProductAttribues = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation(async ({productId, attributesValues}) => {
+    return api.put(`/products/${productId}/attributes`, {attributesValues})
+  }, {
+    onSuccess: ({data}) => {
+      queryClient.setQueryData(['products', data.product?.id], data)
+    },
+  })
+}
+
 const useDeleteProduct = () => {
   const queryClient = useQueryClient()
 
@@ -77,4 +89,11 @@ const useProduct = ({productId}) => {
   })
 }
 
-export { useProducts, useAddProduct, useDeleteProduct, useProduct, useUpdateProduct }
+export { 
+  useProducts, 
+  useAddProduct, 
+  useDeleteProduct, 
+  useProduct, 
+  useUpdateProduct,
+  useUpdateProductAttribues
+}

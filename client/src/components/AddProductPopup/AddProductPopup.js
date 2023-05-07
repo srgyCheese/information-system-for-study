@@ -1,5 +1,5 @@
 import React, { useContext, useRef, useState } from 'react'
-import AddProductAttributesForm from './components/AddProductAttributesForm'
+import ProductAttributesForm from './ProductAttributesForm'
 import { toast } from 'react-toastify'
 import { useAddProduct } from '../../queries/productsQueries'
 import { useCategories } from '../../queries/categoryQueries'
@@ -129,7 +129,7 @@ const AddProductPopup = ({category}) => {
               />
             </div>
           </div>
-          <AddProductAttributesForm
+          <ProductAttributesForm
             currentCategory={currentCategory}
             attributesValues={attributesValues}
             setAttributesValues={setAttributesValues}

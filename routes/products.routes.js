@@ -3,6 +3,7 @@ const { check, validationResult } = require('express-validator')
 const sequelize = require('../models/sequelize')
 const Sequelize = require('sequelize')
 const authMiddleware = require('../middlewares/auth.middleware')
+const { getAttributesValues } = require('../helpers/getAttributesValues')
 
 const {
   Product,
@@ -74,44 +75,7 @@ router.post('/create', authMiddleware(['manager']), [
 
 router.get('/:id', async (req, res, next) => {
   try {
-    const product = await Product.findOne({
-      where: {
-        id: req.params.id,
-      },
-      include: [{
-        model: ProductValue,
-        include: [{
-          model: CategoryAttribute,
-          include: [{ model: ValueType }]
-        },
-        {
-          model: ValuesSelectVariant
-        }
-        ]
-      },
-      {
-        model: ProductPhoto
-      },
-      {
-        model: ProductPrice,
-        attributes: []
-      }
-      ],
-      attributes: {
-        include: [
-          [Sequelize.literal(`(
-            SELECT value
-            FROM product_price
-            WHERE product_price.ProductId = Product.id
-            AND product_price.createdAt = (
-              SELECT MAX(product_price.createdAt) 
-              FROM product_price
-              WHERE product_price.ProductId = Product.id
-            )
-          )`), 'price']
-        ]
-      }
-    })
+    const product = await Product.getWithAllData({where: {id: req.params.id}})
 
     return res.send({ product })
   } catch (e) {
@@ -188,9 +152,21 @@ router.put('/:productId', authMiddleware(['manager']), async (req, res, next) =>
       },
     })
 
+    const product = await Product.getWithAllData({where: {id: productId}})
+
+    return res.send({product})
+  } catch (e) {
+    next(e)
+  }
+})
+
+router.put('/:productId/attributes', authMiddleware(['manager']), async (req, res, next) => {
+  try {
+    const {productId} = req.params
+
     const product = await Product.findOne({
       where: {
-        id: productId,
+        id: productId
       },
       include: [{
         model: ProductValue,
@@ -201,33 +177,43 @@ router.put('/:productId', authMiddleware(['manager']), async (req, res, next) =>
         {
           model: ValuesSelectVariant
         }
-        ]
-      },
-      {
-        model: ProductPhoto
-      },
-      {
-        model: ProductPrice,
-        attributes: []
+      ]}]
+    })
+
+    const attributesValues = getAttributesValues(product.ProductValues)
+
+    for (let key of Object.keys(attributesValues)) {
+      if (typeof req.body?.attributesValues?.[key] !== 'boolean' && !req.body?.attributesValues?.[key]) {
+        return res.status(403).send({
+          message: 'Не все поля введены'
+        })
       }
-      ],
-      attributes: {
-        include: [
-          [Sequelize.literal(`(
-            SELECT value
-            FROM product_price
-            WHERE product_price.ProductId = Product.id
-            AND product_price.createdAt = (
-              SELECT MAX(product_price.createdAt) 
-              FROM product_price
-              WHERE product_price.ProductId = Product.id
-            )
-          )`), 'price']
-        ]
+    }
+
+    for (let productValue of product.ProductValues) {
+      const newValue = req.body.attributesValues[productValue.CategoryAttribute.id]
+      const valueTypeName = productValue.CategoryAttribute.ValueType.name
+
+      if (newValue != productValue[valueTypeName]) {
+        await ProductValue.update({
+          [valueTypeName]: newValue
+        }, {
+          where: {
+            id: productValue.id
+          }
+        })
+      } 
+    }
+
+    const updatedProduct = await Product.getWithAllData({
+      where: {
+        id: productId
       }
     })
 
-    return res.send({product})
+    return res.send({
+      product: updatedProduct
+    })
   } catch (e) {
     next(e)
   }

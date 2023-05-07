@@ -61,7 +61,7 @@ const EditProductShortCard = ({ product, cancelEdit }) => {
                 onClick={e => cancelEdit()}
               >
                 Отмена
-            </button>
+              </button>
             </div>
           </div>
         </form>
