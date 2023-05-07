@@ -163,33 +163,37 @@ router.put('/:userId', authMiddleware(['manager']), async (req, res, next) => {
 
     if (req.body.phone) {
       newUserParams.phone = req.body.phone
-      
-      const thisPhoneUser = await User.findOne({
-        where: {
-          phone: req.body.phone
-        }
-      })
-  
-      if (thisPhoneUser) {
-        return res.status(400).send({
-          message: 'Пользователь с таким телефоном уже существует'
+
+      if (editingUser.id != req.user.id) {
+        const thisPhoneUser = await User.findOne({
+          where: {
+            phone: req.body.phone
+          }
         })
+    
+        if (thisPhoneUser) {
+          return res.status(400).send({
+            message: 'Пользователь с таким телефоном уже существует'
+          })
+        }
       }
     }
 
     if (req.body.email) {
       newUserParams.email = req.body.email
 
-      const thisEmailUser = await User.findOne({
-        where: {
-          email: req.body.email
-        }
-      })
-  
-      if (thisEmailUser) {
-        return res.status(400).send({
-          message: 'Пользователь с таким e-mail уже существует'
+      if (editingUser.id != req.user.id) {
+        const thisEmailUser = await User.findOne({
+          where: {
+            email: req.body.email
+          }
         })
+    
+        if (thisEmailUser) {
+          return res.status(400).send({
+            message: 'Пользователь с таким e-mail уже существует'
+          })
+        }
       }
     }
 
