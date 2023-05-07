@@ -14,7 +14,7 @@ import Spinner from "./components/Spinner"
 const queryClient = new QueryClient()
 
 function App() {
-  const {token, login, logout, ready, user } = useAuth()
+  const {token, login, logout, ready, user, recieveUser } = useAuth()
   const {openPopup, closePopup, popup} = usePopup()
   const isAuthenticated = !!token
 
@@ -34,7 +34,7 @@ function App() {
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <AuthContext.Provider value={{
-          token, login, logout, isAuthenticated, user
+          token, login, logout, isAuthenticated, user, recieveUser
         }}>
           <ToastContainer
             position="bottom-right"

@@ -51,6 +51,12 @@ const EditUser = () => {
       })
     }
 
+    if (editedUser.hasOwnProperty('phone') && editedUser.phone.includes('_')) {
+      return toast('Не введен телефон', {
+        type: 'error'
+      })
+    }
+
     updateUser.mutate({id: userQuery.data.user.id, ...editedUser}, {
       onSuccess: () => navigate(-1)
     })

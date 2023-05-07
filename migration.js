@@ -34,7 +34,7 @@ const start = async () => {
 
     await User.create({
       name: 'Админ Админовый Админович',
-      phone: '+7 (999) 333 00 44',
+      phone: '+7 (999) 333-00-44',
       email: 'admin@gmail.com',
       password: bcrypt.hashSync('password', 8),
       RoleId: adminRole.id

@@ -1,4 +1,5 @@
 import React, { useContext, useRef, useState } from 'react'
+import InputMask from 'react-input-mask';
 import Popup from '../../../components/Popup'
 import { PopupContext } from '../../../contexts/PopupContext'
 import { toast } from 'react-toastify'
@@ -19,6 +20,8 @@ const AddUserPopup = () => {
   const [role, setRole] = useState(null)
   const photoRef = useRef()
 
+  console.log(phone);
+
   const roles = rolesList.filter(role => permissions.lowerRoles().includes(role.name))
 
   const submitHandler = async e => {
@@ -36,7 +39,7 @@ const AddUserPopup = () => {
       })
     }
 
-    if (!phone.trim()) {
+    if (!phone || phone.includes('_')) {
       return toast('Нет введен телефон', {
         type: 'error'
       })
@@ -95,8 +98,9 @@ const AddUserPopup = () => {
         </div>
         <div className="form-outline mb-3">
           <label className="form-label">Номер телефона</label>
-          <input
+          <InputMask 
             type='tel'
+            mask="+7 (999) 999-99-99" 
             className="form-control"
             onChange={e => setPhone(e.target.value)}
             value={phone}

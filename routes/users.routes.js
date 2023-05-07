@@ -71,6 +71,18 @@ router.post('/create',
         })
       }
 
+      const thisPhoneUser = await User.findOne({
+        where: {
+          phone: req.body.phone
+        }
+      })
+
+      if (thisPhoneUser) {
+        return res.status(400).send({
+          message: 'Пользователь с таким телефоном уже существует'
+        })
+      }
+
       const hashedPassword = await bcrypt.hash(req.body.password, 8)
 
       await User.create({
@@ -133,7 +145,7 @@ router.put('/:userId', authMiddleware(['manager']), async (req, res, next) => {
       include: [Role]
     })
 
-    if (!getLowerRoles(req.user.Role.name).includes(editingUser.Role.name)) {
+    if (req.user.id != editingUser.id && !getLowerRoles(req.user.Role.name).includes(editingUser.Role.name)) {
       return res.status(403).send({
         message: 'Недостаточно прав',
       })
@@ -151,10 +163,34 @@ router.put('/:userId', authMiddleware(['manager']), async (req, res, next) => {
 
     if (req.body.phone) {
       newUserParams.phone = req.body.phone
+      
+      const thisPhoneUser = await User.findOne({
+        where: {
+          phone: req.body.phone
+        }
+      })
+  
+      if (thisPhoneUser) {
+        return res.status(400).send({
+          message: 'Пользователь с таким телефоном уже существует'
+        })
+      }
     }
 
     if (req.body.email) {
       newUserParams.email = req.body.email
+
+      const thisEmailUser = await User.findOne({
+        where: {
+          email: req.body.email
+        }
+      })
+  
+      if (thisEmailUser) {
+        return res.status(400).send({
+          message: 'Пользователь с таким e-mail уже существует'
+        })
+      }
     }
 
     if (req.body.password) {

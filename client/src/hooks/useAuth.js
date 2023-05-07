@@ -58,7 +58,7 @@ export const useAuth = () => {
     recieveUser()
   }, [token])
 
-  return { login, logout, token, ready, user }
+  return { login, logout, token, ready, user, recieveUser }
 }
 
 export default useAuth

@@ -1,6 +1,7 @@
 import React from 'react'
 import { usePermissions } from '../../../hooks/usePermissions'
 import { rolesList } from '../../../services/roles'
+import ReactInputMask from 'react-input-mask'
 
 const EditUserCard = ({ user, setEditedUser, editedUser }) => {
   const permissions = usePermissions()
@@ -65,8 +66,10 @@ const EditUserCard = ({ user, setEditedUser, editedUser }) => {
           </div>
           <div className="col-sm-9">
             <p className="text-muted mb-0">
-              <input 
-                className='form-control'
+              <ReactInputMask
+                type='tel'
+                mask="+7 (999) 999-99-99" 
+                className="form-control"
                 {...editInputTextProps('phone')}
               />
             </p>
