@@ -78,7 +78,7 @@ router.get('/', async (req, res, next) => {
           [Sequelize.literal(`(
             SELECT COUNT(product_item.ProductId)
             FROM product_item
-            WHERE product_item.WarehouseId = Warehouse.id
+            WHERE product_item.WarehouseId = Warehouse.id AND product_item.ProductId = Product.id
           )`), 'count']
         ]
       },
