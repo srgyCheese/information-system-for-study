@@ -79,6 +79,7 @@ export const usePermissions = () => {
     products: {
       create: _adminOrManager,
       update: _adminOrManager,
+      delete: _adminOrManager,
     },
     categories: {
       create: _adminOrManager,

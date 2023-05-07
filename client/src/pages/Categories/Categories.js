@@ -44,7 +44,8 @@ const Categories = () => {
       </>}
       <div className="d-flex gap-2">
         {currentCategory?.isProductCategory 
-          ? <button 
+          ?
+            permissions.products.create() && <button 
               type="button"
               className="btn btn-outline-success"
               onClick={() => openPopup(<AddProductPopup category={id} />)}
@@ -62,7 +63,7 @@ const Categories = () => {
           )
         }
 
-        {currentCategory && (
+        {currentCategory && permissions.categories.update() && (
           <button 
             type="button"
             className="btn btn-outline-success"

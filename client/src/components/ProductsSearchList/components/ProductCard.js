@@ -2,9 +2,11 @@ import React from 'react'
 import { useDeleteProduct } from '../../../queries/productsQueries'
 import DeleteButton from '../../DeleteButton'
 import { useNavigate } from 'react-router-dom'
+import { usePermissions } from '../../../hooks/usePermissions'
 
 const ProductCard = ({product}) => {
   const deleteProduct = useDeleteProduct()
+  const permissions = usePermissions()
   const navigate = useNavigate()
   
   const navigateToProduct = () => navigate(`/products/${product.id}`)
@@ -24,14 +26,16 @@ const ProductCard = ({product}) => {
             <h5 className="card-title cursor-pointer" onClick={navigateToProduct}>{product.title}</h5>
             <p className="card-text">{product.description}</p>
           </div>
-          <div className='position-absolute' style={{bottom: '10px', right: '10px'}}>
-            <DeleteButton 
-              onClick={() => {
-                deleteProduct.mutate(product.id)
-              }}
-              isLoading={deleteProduct.isLoading || deleteProduct.isSuccess}
-            />
-          </div>
+          {permissions.products.delete() && (
+            <div className='position-absolute' style={{bottom: '10px', right: '10px'}}>
+              <DeleteButton 
+                onClick={() => {
+                  deleteProduct.mutate(product.id)
+                }}
+                isLoading={deleteProduct.isLoading || deleteProduct.isSuccess}
+              />
+            </div>
+          )}
           <div className='position-absolute' style={{top: '10px', right: '10px'}}>
             <div className='border-rounded fw-bold fs-5'>
               {product.price} ₽
