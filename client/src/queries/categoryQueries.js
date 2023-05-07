@@ -62,6 +62,20 @@ const useAddCategory = () => {
   })
 }
 
+const useDeleteCategory = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation(async categoryId => {    
+    return api.delete(`/categories/${categoryId}`)
+  }, {
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['categories']
+      })
+    },
+  })
+}
+
 const useCategoryValueTypes = () => useQuery('category-value-types', () => api.getData(`/categories/value-types`))
 
-export { useCategories, useCategoryValueTypes, useCategoryAttributes, useAddCategory, useUpdateCategory }
+export { useCategories, useCategoryValueTypes, useCategoryAttributes, useAddCategory, useUpdateCategory, useDeleteCategory }

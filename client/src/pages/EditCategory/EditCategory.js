@@ -4,18 +4,21 @@ import { useNavigate, useParams } from 'react-router-dom'
 import Spinner from '../../components/Spinner'
 import { toast } from 'react-toastify'
 import { useTitle } from '../../hooks/useTitle'
-import { useCategories, useUpdateCategory } from '../../queries/categoryQueries'
+import { useCategories, useDeleteCategory, useUpdateCategory } from '../../queries/categoryQueries'
 
 const EditCategory = () => {
   const { categoryId } = useParams()
   const navigate = useNavigate()
   const photoRef = useRef()
   const allCategoriesQuery = useCategories()
+
   const categoryQuery = useCategories(categoryId)
 
   useTitle(categoryQuery?.data?.category?.title ? `Изменить ${categoryQuery?.data?.category?.title}` : `Изменение категории`)
   
   const updateCategory = useUpdateCategory()
+  const deleteCategory = useDeleteCategory()
+
   const [editedCategory, setEditedCategory] = useState({})
 
   if (categoryQuery.isLoading) {
@@ -48,7 +51,17 @@ const EditCategory = () => {
     })
   }
 
+  const deleteHandle = e => {
+    deleteCategory.mutate(categoryId, {
+      onSuccess: () => navigate(-1)
+    })
+  }
+
   const category = categoryQuery?.data?.category
+
+  if (!category?.id) {
+    return navigate('/categories')
+  }
   
   const parentCategoriesVariants = allCategoriesQuery.data.categories.filter(cat => !cat.isProductCategory && cat.id !== category.id)
 
@@ -101,6 +114,15 @@ const EditCategory = () => {
           >
             {updateCategory.isLoading && <span className="spinner-border spinner-border-sm me-2" />}
             Сохранить
+          </button>
+          <button
+            className='btn btn-outline-danger'
+            type='button'
+            onClick={deleteHandle}
+            disabled={deleteCategory.isLoading}
+          >
+            {deleteCategory.isLoading && <span className="spinner-border spinner-border-sm me-2" />}
+            Удалить
           </button>
           <button
             className='btn btn-outline-danger'

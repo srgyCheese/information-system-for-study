@@ -3,7 +3,7 @@ const authMiddleware = require('../middlewares/auth.middleware')
 const sequelize = require('../models/sequelize')
 const router = Router()
 
-const {Category, ValueType, CategoryAttribute, ValuesSelectVariant} = sequelize.models
+const {Category, ValueType, CategoryAttribute, ValuesSelectVariant, Product} = sequelize.models
 
 router.get('/', async (req, res, next) => {
   try {
@@ -85,6 +85,30 @@ router.delete('/:categoryId', authMiddleware(['manager']), async (req, res, next
       }
     })
 
+    const categoryProduct = await Product.findOne({
+      where: {
+        CategoryId: category.id
+      }
+    })
+
+    if (categoryProduct) {
+      return res.status(403).send({
+        message: 'Категория содержит товары'
+      })
+    }
+
+    const categoryChild = await Category.findOne({
+      where: {
+        parent_category_id: category.id
+      }
+    })
+
+    if (categoryChild) {
+      return res.status(403).send({
+        message: 'Категория содержит другие категории'
+      })
+    }
+
     await CategoryAttribute.destroy({
       where: {
         CategoryId: req.params.categoryId
@@ -94,7 +118,7 @@ router.delete('/:categoryId', authMiddleware(['manager']), async (req, res, next
     await category.destroy()
 
     return res.send({
-      success: true
+      message: 'Категория удалена'
     })
   } catch (e) {
     next(e)

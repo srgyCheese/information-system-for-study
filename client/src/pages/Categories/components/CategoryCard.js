@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router'
-import { useCategories } from '../../../queries/categoryQueries'
 import DeleteButton from '../../../components/DeleteButton'
 import EditButton from '../../../components/EditButton'
 import { usePermissions } from '../../../hooks/usePermissions'
@@ -29,12 +28,14 @@ const CategoryCard = ({ category }) => {
             >
               {category.title}
             </h5>
-
-            {permissions.categories.update() && (
-              <EditButton 
-                onClick={() => navigate(`/categories/${category.id}/edit`)}
-              />
-            )}
+            
+            <div className="d-flex gap-1">
+              {permissions.categories.update() && (
+                <EditButton 
+                  onClick={() => navigate(`/categories/${category.id}/edit`)}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>
