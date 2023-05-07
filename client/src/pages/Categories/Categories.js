@@ -33,9 +33,13 @@ const Categories = () => {
     )
   }
 
+  if (!currentCategory?.id && id) {
+    navigate(`/categories`)
+  }
+
   const currentCategoryChilds = data?.categories
-    ?.filter(cat => cat.parent_category_id == id)
-    ?.map(cat => ({...cat, hasChild: data.categories.findIndex(c => c.parent_category_id === cat.id) != -1}))
+    ?.filter(cat => cat?.parent_category_id == id)
+    ?.map(cat => ({...cat, hasChild: data.categories.findIndex(c => c?.parent_category_id === cat.id) != -1}))
 
   return (
     <Layout>
@@ -67,7 +71,11 @@ const Categories = () => {
           <button 
             type="button"
             className="btn btn-outline-success"
-            onClick={() => navigate(`/categories/${currentCategory.id}/edit`)}
+            onClick={() => navigate(`/categories/${currentCategory.id}/edit`, {
+              state: {
+                redirectOnDelete: `/categories/${currentCategory.parent_category_id ? currentCategory.parent_category_id : ''}`
+              }
+            })}
           >
             Редактировать
           </button> 

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import Layout from '../../components/Layout'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import Spinner from '../../components/Spinner'
 import { toast } from 'react-toastify'
 import { useTitle } from '../../hooks/useTitle'
@@ -8,7 +8,10 @@ import { useCategories, useDeleteCategory, useUpdateCategory } from '../../queri
 
 const EditCategory = () => {
   const { categoryId } = useParams()
+  
   const navigate = useNavigate()
+  const location = useLocation()
+
   const photoRef = useRef()
   const allCategoriesQuery = useCategories()
 
@@ -53,7 +56,7 @@ const EditCategory = () => {
 
   const deleteHandle = e => {
     deleteCategory.mutate(categoryId, {
-      onSuccess: () => navigate(-1)
+      onSuccess: () => navigate(location.state.redirectOnDelete || -1)
     })
   }
 

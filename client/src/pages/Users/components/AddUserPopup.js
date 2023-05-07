@@ -20,8 +20,6 @@ const AddUserPopup = () => {
   const [role, setRole] = useState(null)
   const photoRef = useRef()
 
-  console.log(phone);
-
   const roles = rolesList.filter(role => permissions.lowerRoles().includes(role.name))
 
   const submitHandler = async e => {
