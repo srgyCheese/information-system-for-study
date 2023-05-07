@@ -21,13 +21,13 @@ const ProductItemsList = ({warehouseId}) => {
       {productItems.map(productItem => (
         <div className="card" key={productItem.id}>
           <div className="d-flex">
-            <div>
+            <Link to={`/products/${productItem.Product.id}`}>
               <img 
                 src={productItem.Product.ProductPhotos[0].url} 
                 className="rounded-start object-fit-contain"
                 style={{ height: '176px', width: '160px' }}
               />
-            </div>
+            </Link>
             <div>
               <div className="card-body">
                 <Link to={`/products/${productItem.Product.id}`} className='text-dark text-decoration-none'>
