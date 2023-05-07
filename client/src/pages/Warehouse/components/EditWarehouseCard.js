@@ -45,11 +45,13 @@ const EditWarehouseCard = ({ warehouse, disableEditing }) => {
     <input 
       type="text"
       className='form-control mb-2 fw-bold'
+      placeholder='Название'
       {...editInputTextProps('title')}
     />
     <input 
       type="text"
       className='form-control mb-2'
+      placeholder='Адрес'
       {...editInputTextProps('address')}
     />
 
