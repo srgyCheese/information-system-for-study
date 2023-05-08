@@ -31,7 +31,9 @@ const useUpdateCategory = () => {
     return api.put(`/categories/${category.id}`, category)
   }, {
     onSuccess: () => {
-      queryClient.invalidateQueries('categories')
+      queryClient.invalidateQueries({
+        queryKey: 'categories'
+      })
     },
   })
 }
@@ -57,7 +59,9 @@ const useAddCategory = () => {
     return api.post('/categories/create', category)
   }, {
     onSuccess: () => {
-      queryClient.invalidateQueries('categories')
+      queryClient.invalidateQueries({
+        queryKey: 'categories',
+      })
     },
   })
 }

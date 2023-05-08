@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router'
 import DeleteButton from '../../../components/DeleteButton'
 import EditButton from '../../../components/EditButton'
 import { usePermissions } from '../../../hooks/usePermissions'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const CategoryCard = ({ category }) => {
   const navigate = useNavigate()

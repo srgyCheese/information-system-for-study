@@ -32,8 +32,15 @@ const EditCategory = () => {
     )
   }
 
+  const category = categoryQuery?.data?.category
+  const parentCategoryPath = `/categories/${category.parent_category_id ? category.parent_category_id : ''}`
+
   const submitHandler = e => {
     e.preventDefault()
+
+    if (!Object.keys(editedCategory).length) {
+      return navigate(location.state?.redirectOn?.cancel || parentCategoryPath)
+    }
 
     if (!(editedCategory?.title || editedCategory?.parent_category_id != undefined || photoRef.current?.files?.[0])) {
       return toast('Не введены поля', {
@@ -50,17 +57,15 @@ const EditCategory = () => {
       photo: photoRef.current?.files?.[0],
       parent_category_id: newParentCategory,
     }, {
-      onSuccess: () => navigate(`/categories/${newParentCategory ? newParentCategory : ''}`)
+      onSuccess: () => navigate(location.state?.redirectOn?.save || `/categories/${newParentCategory ? newParentCategory : ''}`)
     })
   }
 
   const deleteHandle = e => {
     deleteCategory.mutate(categoryId, {
-      onSuccess: () => navigate(location.state.redirectOnDelete || -1)
+      onSuccess: () => navigate(location.state?.redirectOn?.delete || parentCategoryPath)
     })
   }
-
-  const category = categoryQuery?.data?.category
 
   if (!category?.id) {
     return navigate('/categories')
@@ -130,7 +135,7 @@ const EditCategory = () => {
           <button
             className='btn btn-outline-danger'
             type='button'
-            onClick={() => navigate(-1)}
+            onClick={() => navigate(location.state?.redirectOn?.cancel || parentCategoryPath)}
           >
             Отмена
           </button>

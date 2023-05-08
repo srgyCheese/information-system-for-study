@@ -3,7 +3,7 @@ import CategoryCard from './CategoryCard'
 
 const CategoriesList = ({ categories }) => {
   if (!categories?.length) {
-    return <h5>Категорий не найдено</h5>
+    return <h5>Нет категорий</h5>
   }
 
   return (

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useNavigate, useParams } from 'react-router'
+import { useNavigate, useParams, useLocation } from 'react-router'
 import Layout from '../../components/Layout'
 import Spinner from '../../components/Spinner'
 import { useCategories } from '../../queries/categoryQueries'
@@ -16,7 +16,9 @@ const Categories = () => {
   const {id} = useParams()
 
   const {isLoading, data} = useCategories()
+
   const navigate = useNavigate()
+  const location = useLocation()
 
   const currentCategory = data?.categories?.find(el => el.id == +id)
 
@@ -73,7 +75,11 @@ const Categories = () => {
             className="btn btn-outline-success"
             onClick={() => navigate(`/categories/${currentCategory.id}/edit`, {
               state: {
-                redirectOnDelete: `/categories/${currentCategory.parent_category_id ? currentCategory.parent_category_id : ''}`
+                redirectOn: {
+                  delete: `/categories/${currentCategory.parent_category_id ? currentCategory.parent_category_id : ''}`,
+                  save: location.pathname,
+                  cancel: location.pathname,
+                }
               }
             })}
           >
