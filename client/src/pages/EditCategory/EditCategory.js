@@ -38,11 +38,13 @@ const EditCategory = () => {
   const submitHandler = e => {
     e.preventDefault()
 
-    if (!Object.keys(editedCategory).length) {
+    const newPhoto = photoRef.current?.files?.[0]
+
+    if (!Object.keys(editedCategory).length && !newPhoto) {
       return navigate(location.state?.redirectOn?.cancel || parentCategoryPath)
     }
 
-    if (!(editedCategory?.title || editedCategory?.parent_category_id != undefined || photoRef.current?.files?.[0])) {
+    if (!(editedCategory?.title || editedCategory?.parent_category_id != undefined || newPhoto)) {
       return toast('Не введены поля', {
         type: 'error'
       })
@@ -54,7 +56,7 @@ const EditCategory = () => {
     updateCategory.mutate({
       ...editedCategory,
       id: category.id,
-      photo: photoRef.current?.files?.[0],
+      photo: newPhoto,
       parent_category_id: newParentCategory,
     }, {
       onSuccess: () => navigate(location.state?.redirectOn?.save || `/categories/${newParentCategory ? newParentCategory : ''}`)
@@ -88,7 +90,7 @@ const EditCategory = () => {
                     objectFit: 'contain'
                   }} 
                 />
-                <input type='file' className='form-control mt-2' ref={photoRef} />
+                <input type='file' className='form-control mt-2' ref={photoRef} accept=".jpg, .jpeg, .png" />
               </div>
               <div className='ps-4 w-100'>
                 <div>Название</div>

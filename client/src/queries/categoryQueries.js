@@ -22,7 +22,7 @@ const useUpdateCategory = () => {
 
   return useMutation(async category => {
 
-    if (category.photo) {
+    if (category.photo instanceof File) {
       const photoUrlRes = await api.addPhoto(category.photo)
   
       category.photo = photoUrlRes.data.url
