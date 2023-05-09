@@ -10,6 +10,7 @@ switch (process.env.DB_DRIVER) {
             define: {
               timestamps: false
             },
+            logging: process.env.NODE_ENV === 'production' ? false : console.log
         })
         break
     case 'SQLITE':
@@ -19,6 +20,7 @@ switch (process.env.DB_DRIVER) {
             define: {
               timestamps: false
             },
+            logging: process.env.NODE_ENV === 'production' ? false : console.log
         });
         break
     default:
